@@ -50,9 +50,7 @@ export class UserService {
         where: {
           userId: updateUserDto.userId,
         },
-        data: {
-          ...updateUserDto,
-        },
+        data: updateUserDto,
       });
 
       if (!updateUser) {
@@ -61,6 +59,8 @@ export class UserService {
           status: "failed",
         });
       }
+
+      return { status: "success", data: updateUser };
     } catch (error) {
       throw new BadRequestException({
         error: error.message,

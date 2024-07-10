@@ -20,8 +20,7 @@ import { EncryptionService } from "src/shared";
     JwtModule.register({
       secret: process.env.JWT_SECRETE_KEY,
       signOptions: {
-        expiresIn: "5m",
-        // "2 days"
+        expiresIn: process.env.JWT_EXPR_TIME,
       },
     }),
   ],

@@ -41,7 +41,7 @@ export class AuthService {
         });
       }
 
-      const { first_name, last_name, email, password } = createUserDto;
+      const { user_name, email, password } = createUserDto;
 
       // Encrypt password
       // const encryptedPass = CryptoJS.AES.encrypt(
@@ -52,11 +52,10 @@ export class AuthService {
 
       const createAuth = await this.prisma.auth.create({
         data: {
-          userId: `${first_name + Math.random().toString(36).slice(2)}`,
+          userId: `${user_name + Math.random().toString(36).slice(2)}`,
+          user_name: user_name,
           email: createUserDto.email,
           password: `${encryptedPass}`,
-          first_name: createUserDto.first_name,
-          last_name: createUserDto.last_name,
         },
       });
 
@@ -70,8 +69,7 @@ export class AuthService {
       const userInfo = {
         userId: createAuth.userId,
         email: email,
-        first_name,
-        last_name,
+        user_name: user_name,
       };
       const newUser = await this.prisma.user.create({ data: userInfo });
       if (!newUser) {
@@ -102,7 +100,7 @@ export class AuthService {
       // });
 
       return {
-        status: "success",
+        status: 200,
         message: "Artsony account created successfully",
         userId: newUser.userId,
         user: newUser.email,

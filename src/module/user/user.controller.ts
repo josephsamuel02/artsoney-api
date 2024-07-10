@@ -24,20 +24,27 @@ export class UserController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get("all_users")
   getAllUsers() {
-    // return req.headers["authorization"];
-
     return this.userService.getAllUsers();
   }
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Put("update_user")
-  update(@Body() updateUserDto: UpdateUserDto) {
+  updateUserById(@Body() updateUserDto: UpdateUserDto) {
     return this.userService.updateUserById(updateUserDto);
   }
 
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
+  // @UseGuards(JwtAuthGuard)
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Put("suspend_user")
+  // suspendUser(@Body() updateUserDto: UpdateUserDto) {
+  //   return this.userService.suspendUser(updateUserDto);
+  // }
+
+  // @UseGuards(JwtAuthGuard)
+  // @UseInterceptors(ClassSerializerInterceptor)
+  // @Delete("delete_account")
+  // deleteUser(@Body("id") updateUserDto: UpdateUserDto) {
+  //   return this.userService.deleteUser(updateUserDto);
   // }
 }
