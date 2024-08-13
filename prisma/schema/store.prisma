@@ -1,0 +1,10 @@
+model Store {
+    id        String    @id @default(auto()) @map("_id") @db.ObjectId
+    user_name String?
+    User      User      @relation(fields: [userId], references: [userId])
+    userId    String    @unique
+    comments  Comment[]
+    artwork   artwork[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+}

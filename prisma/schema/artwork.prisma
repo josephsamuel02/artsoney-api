@@ -1,0 +1,77 @@
+model artwork {
+    id         String  @id @default(auto()) @map("_id") @db.ObjectId
+    artwork_id String  @unique
+    userId     String
+    storeId    String? @unique
+
+    artwork_name      String
+    tags              String[]
+    tools             String[]
+    description       String?
+    art_field         String[]
+    visibility        String?     @default("everyone")
+    disable_comments  Boolean?    @default(false)
+    copyright_license String[]
+    co_owners         co_owners[]
+    designed_for      String[]
+
+    appreciation                       String[]
+    dimensions                         Dimensions?
+    images                             String[]
+    thumbnail                          String?
+    embed_code                         String[]
+    audio_video                        String[]
+    animated_3d                        String[]
+    certificate_of_authentication_type Certificate_of_authentication_type?
+    certificate_of_authentication      String[]
+
+    available_quantity Int?
+    currency           currency?
+    auction            Boolean?  @default(false)
+    price              Int?
+
+    likes    Int?
+    views    Int?
+    comments comments[]
+
+    for_sale Boolean?
+    draft    Boolean  @default(false)
+
+    Store Store @relation(fields: [id], references: [id])
+
+    createdAt DateTime? @default(now())
+    updatedAt DateTime? @updatedAt
+}
+
+type co_owners {
+    profile_img String?
+    user_name   String
+    userId      String
+}
+
+type comments {
+    profile_img String?
+    userId      String
+    user_name   String?
+    comment     String?
+    likes       Int?
+}
+
+type Dimensions {
+    length  String
+    breadth String
+    height  String?
+}
+
+enum currency {
+    usd
+    ngn
+    euro
+    gbp
+}
+
+enum Certificate_of_authentication_type {
+    physical
+    digital
+    hyprid
+}

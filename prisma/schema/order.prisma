@@ -1,0 +1,36 @@
+enum OrderStatus {
+    PENDING
+    SHIPPED
+    DELIVERED
+    CANCELLED
+}
+
+model Order {
+    order_id    String           @id @default(auto()) @map("_id") @db.ObjectId
+    userId      String
+    billing     Billing?
+    shipping    DeliveryAddress?
+    products    products[]
+    total_price Int?
+    status      OrderStatus?     @default(PENDING)
+    createdAt   DateTime         @default(now())
+    updatedAt   DateTime         @updatedAt
+    metadata    Json?
+}
+
+type products {
+    userId        String?
+    storeId       String?
+    product_id    String?
+    product_image String[]
+    product_title String?
+    price         Int?
+    quantity      Int?
+}
+
+// the below are not used
+type DeliveryAddress {
+    country String?
+    state   String?
+    address String?
+}

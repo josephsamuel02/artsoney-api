@@ -1,0 +1,167 @@
+model User {
+    id            String    @id @default(auto()) @map("_id") @db.ObjectId
+    userId        String    @unique
+    user_name     String?
+    email         String?   @unique
+    phone_number  String?
+    first_name    String?
+    last_name     String?
+    middle_name   String?
+    date_of_birth DateTime?
+    address       Address?
+
+    profile_img        String?
+    profile_poster_img String?
+
+    about     String?
+    art_focus String?
+    bio       String?
+    socials   Socials?
+    website   String[]
+
+    country   String?
+    state     String?
+    time_zone String?
+    language  String?
+
+    profession String[]
+    following  following[]
+    followers  followers[]
+    likes      Int?        @default(0)
+    interests  String[]
+    hubby      String[]
+    Post       Post[]
+    moodboard  moodboard?
+
+    isActive     Boolean? @default(false)
+    suspended    Boolean? @default(false)
+    authStrategy String?
+
+    Store Store?
+
+    createdAt DateTime @default(now())
+    updatedAt DateTime @updatedAt
+}
+
+type Socials {
+    facebook  String?
+    x_social  String?
+    instagram String?
+    youtube   String?
+    tiktok    String?
+    patreon   String?
+}
+
+type Address {
+    country    String
+    street     String
+    city       String?
+    state      String
+    zip        String?
+    ip_address String?
+}
+
+type following {
+    user_name String
+    userId    String
+}
+
+type followers {
+    user_name String
+    userId    String
+}
+
+model AccountSettings {
+    id               String           @id @default(auto()) @map("_id") @db.ObjectId
+    userId           String           @unique
+    email            String?
+    artsony_link     String?
+    notification     Notification?
+    privacy_settings PrivacySettings?
+    blocking         Blocking[]
+    billing          Billing?
+    shipping         Shipping?
+}
+
+type Notification {
+    nominate_for_art_of_the_week         Boolean?
+    use_my_artwork_on_artsony            Boolean?
+    use_my_artwork_for_social_media_post Boolean?
+
+    like_my_art           Boolean?
+    comment_on_my_art     Boolean?
+    follow_me             Boolean?
+    message_me            Boolean?
+    respond_to_my_message Boolean?
+
+    following_post_a_artwork                Boolean?
+    following_message_me                    Boolean?
+    following_like_artworks_in_my_moodboard Boolean?
+    following_post_artwork_for_sale         Boolean?
+    following_respond_to_my_message         Boolean?
+
+    my_artwork_hit_100_likes       Boolean?
+    my_artwork_hit_500_likes       Boolean?
+    my_artwork_hit_1000_likes      Boolean?
+    my_artwork_hit_10000_likes     Boolean?
+    my_artwork_hit_a_million_likes Boolean?
+
+    users_purchase_my_artwork                          Boolean?
+    buyers_message_me                                  Boolean?
+    a_buyer_gives_a_bad_review_on_my_artwork_purchased Boolean?
+    a_buyer_wants_to_return_an_artwork                 Boolean?
+
+    their_are_pending_orders              Boolean?
+    when_orders_are_activated             Boolean?
+    when_a_buyer_wants_to_return_an_order Boolean?
+    when_an_order_arrives_damaged         Boolean?
+
+    can_make_withdrawal_from_my_wallet Boolean?
+    withdraw_from_my_Wallet            Boolean?
+
+    notify_me_When_Others_like_my_artwork                         Boolean?
+    notify_me_when_others_comment_on_my_artwork                   Boolean?
+    notify_me_when_others_message_me                              Boolean?
+    notify_me_when_others_purchase_my_artwork                     Boolean?
+    notify_me_when_I_have_pending_orders                          Boolean?
+    notify_me_when_I_can_Withdraw_from_my_wallet                  Boolean?
+    notify_me_when_users_I_follow_post_a_new_artwork              Boolean?
+    notify_me_when_users_i_follow_like_an_artwork_in_my_moodboard Boolean?
+    notify_me_when_users_I_follow_post_a_new_artwork_for_sale     Boolean?
+}
+
+type PrivacySettings {
+    anyone_can_message_me                                    Boolean?
+    only_people_that_I_follow_can_message_me                 Boolean?
+    only_users_who_follow_me_can_message_me                  Boolean?
+    both_users_who_follow_me_and_who_I_follow_can_message_me Boolean?
+
+    anyone_can_tag_me                                    Boolean?
+    only_people_that_I_follow_can_tag_me                 Boolean?
+    only_users_who_follow_me_can_tag_me                  Boolean?
+    both_users_who_follow_me_and_who_I_follow_can_tag_me Boolean?
+
+    anyone_can_comment                                    Boolean?
+    only_people_that_I_follow_can_comment                 Boolean?
+    only_users_who_follow_me_can_comment                  Boolean?
+    both_users_who_follow_me_and_who_I_follow_can_comment Boolean?
+}
+
+type Blocking {
+    userId      String
+    user_name   String
+    profile_img String
+}
+
+type Billing {
+    holders_name String
+    card_number  String
+    cvv          String
+    exp_d        String
+}
+
+type Shipping {
+    country String?
+    state   String?
+    address String?
+}

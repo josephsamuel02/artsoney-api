@@ -1,42 +1,17 @@
+import { Socials } from "@prisma/client";
 import {
   IsString,
   IsNotEmpty,
-  IsDateString,
   IsOptional,
   IsEmail,
+  IsDateString,
   IsObject,
-  IsBoolean,
   IsArray,
+  IsBoolean,
 } from "class-validator";
+import { Address } from "cluster";
 
-interface Following {
-  user_name: string;
-  userId: string;
-}
-
-interface Followers {
-  user_name: string;
-  userId: string;
-}
-
-interface Socials {
-  facebook?: string;
-  x_social?: string;
-  instagram?: string;
-  youtube?: string;
-  tiktok?: string;
-  patreon?: string;
-}
-interface Address {
-  country: string;
-  street: string;
-  city?: string;
-  state: string;
-  zip?: string;
-  ip_address?: string;
-}
-
-export class UpdateUserDto {
+export class UpdateAnalyticsDto {
   @IsString()
   @IsNotEmpty()
   userId: string;
@@ -115,14 +90,6 @@ export class UpdateUserDto {
 
   @IsOptional()
   profession?: string[];
-
-  @IsObject()
-  @IsOptional()
-  following?: Following;
-
-  @IsObject()
-  @IsOptional()
-  followers?: Followers;
 
   @IsObject()
   @IsOptional()

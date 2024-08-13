@@ -72,11 +72,29 @@ export class AuthService {
         user_name: user_name,
       };
       const newUser = await this.prisma.user.create({ data: userInfo });
+
       if (!newUser) {
         throw new BadRequestException({
           message: "Unable to create user profile",
         });
       }
+
+      // Create user account information
+      const userAccount = {
+        userId: createAuth.userId,
+        email: email,
+      };
+
+      const account = await this.prisma.accountSettings.create({
+        data: userAccount,
+      });
+
+      if (!account) {
+        throw new BadRequestException({
+          message: "Unable to create user profile",
+        });
+      }
+
       //  { Do not delete   }
       // Create user and related auth profile
       // const newUser = await this.prisma.user.create({
