@@ -12,7 +12,7 @@ async function bootstrap() {
   //   origin: [
   //     "http://localhost:3000",
   //     "http://localhost:5173",
-  //     "http://localhost:5172",
+  //     "http://localhost:5172"
   //   ],
   // });
 
