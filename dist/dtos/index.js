@@ -19,4 +19,5 @@ __exportStar(require("./loginUser.dto"), exports);
 __exportStar(require("./updateUser.dto"), exports);
 __exportStar(require("./postArtwork.dto"), exports);
 __exportStar(require("./updateArtwork.dto"), exports);
+__exportStar(require("./accountSettings.dto"), exports);
 //# sourceMappingURL=index.js.map
