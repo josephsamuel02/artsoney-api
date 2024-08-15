@@ -8,7 +8,23 @@ interface Wallet {
 interface BankInformation {
   bank_name?: string;
   account_name?: string;
-  account_number?: number;
+  account_number?: string;
+}
+
+interface Reviews {
+  user_name?: string;
+  user_id: string;
+  profile_image?: string;
+  rating?: number;
+  review?: string;
+}
+
+interface Rating {
+  artsony_score?: number;
+  art_rating?: number;
+  customer_satisfaction?: number;
+  delivery_rating?: number;
+  reviews?: Reviews[];
 }
 
 export class SalesDto {
@@ -32,8 +48,7 @@ export class SalesDto {
   sales?: number;
 
   @IsOptional()
-  @IsNumber()
-  artsony_score?: number;
+  rating?: Rating;
 
   @IsOptional()
   bank_information?: BankInformation[];

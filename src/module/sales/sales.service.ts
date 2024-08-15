@@ -1,25 +1,21 @@
 import { Injectable } from "@nestjs/common";
 import { SalesDto } from "src/dtos/sales.dto";
+import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class SalesService {
-  create(salesDto: SalesDto) {
-    return `This action adds a new analytics ${salesDto}`;
+  constructor(private readonly prisma: PrismaService) {}
+
+  async findByUserId(userId: string): Promise<any> {
+    return this.prisma.sales.findUnique({
+      where: { userId },
+    });
   }
 
-  findAll() {
-    return `This action returns all analytics`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} analytics`;
-  }
-
-  update(id: number, salesDto: SalesDto) {
-    return `This action updates a #${id} analytics ${salesDto}`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} analytics`;
+  async updateSales(salesDto: SalesDto): Promise<any> {
+    return this.prisma.sales.update({
+      where: { userId: salesDto.userId },
+      data: salesDto,
+    });
   }
 }

@@ -1,47 +1,30 @@
 import {
   Controller,
   Get,
-  Post,
-  Body,
-  Patch,
+  Put,
   Param,
-  Delete,
+  Body,
+  UseGuards,
+  UseInterceptors,
 } from "@nestjs/common";
-import { UpdateAnalyticsDto } from "src/dtos/updateAnalytics.dto";
-import { ApiTags } from "@nestjs/swagger";
-import { SalesDto } from "src/dtos/sales.dto";
+import { ClassSerializerInterceptor } from "@nestjs/common";
 import { SalesService } from "./sales.service";
+import { JwtAuthGuard } from "src/validation/jwt-auth.guard";
+import { SalesDto } from "src/dtos/sales.dto";
 
-@ApiTags("sales")
 @Controller("sales")
+@UseGuards(JwtAuthGuard)
+@UseInterceptors(ClassSerializerInterceptor)
 export class SalesController {
   constructor(private readonly salesService: SalesService) {}
 
-  @Post()
-  create(@Body() salesDto: SalesDto) {
-    return this.salesService.create(salesDto);
+  @Get(":userId")
+  async getSalesByUserId(@Param("userId") userId: string): Promise<any> {
+    return await this.salesService.findByUserId(userId);
   }
 
-  @Get()
-  findAll() {
-    return this.salesService.findAll();
-  }
-
-  @Get(":id")
-  findOne(@Param("id") id: string) {
-    return this.salesService.findOne(+id);
-  }
-
-  @Patch(":id")
-  update(
-    @Param("id") id: string,
-    @Body() updateAnalyticsDto: UpdateAnalyticsDto,
-  ) {
-    return this.salesService.update(+id, updateAnalyticsDto);
-  }
-
-  @Delete(":id")
-  remove(@Param("id") id: string) {
-    return this.salesService.remove(+id);
+  @Put(":userId")
+  async updateSales(@Body() salesDto: SalesDto): Promise<any> {
+    return await this.salesService.updateSales(salesDto);
   }
 }

@@ -1,7 +1,6 @@
 import {
   BadRequestException,
   Injectable,
-  Logger,
   NotFoundException,
   UnauthorizedException,
 } from "@nestjs/common";
@@ -18,13 +17,6 @@ export class AuthService {
     private jwtService: JwtService,
     private encryptionService: EncryptionService,
   ) {}
-  private logger = new Logger("createUser");
-
-  async test(data: any) {
-    this.logger.log("test");
-    // const createUser = await this.prisma.prismaClient.user.findFirst(data);
-    return data;
-  }
 
   public async createUser(createUserDto: CreateUserDto): Promise<any> {
     try {

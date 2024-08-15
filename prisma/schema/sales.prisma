@@ -11,13 +11,33 @@ model sales {
     updatedAt        DateTime?         @updatedAt
 }
 
+// Type for Wallet
 type Wallet {
-    available_balance Int?
-    pending_balance   Int?
+    available_alance Int?
+    pending_alance   Int?
 }
 
+// Type for BankInformation
 type BankInformation {
     bank_name      String?
     account_name   String?
-    account_number Int?
+    account_number String?
+}
+
+// Type for Rating
+type Rating {
+    artsony_core         Int?
+    artRating            Int?
+    customer_atisfaction Int?
+    delivery_ating       Int?
+    reviews              Reviews[]
+}
+
+// Type for Reviews
+type Reviews {
+    user_ame      String?
+    userId        String
+    profile_image String?
+    rating        Int?
+    review        String?
 }
