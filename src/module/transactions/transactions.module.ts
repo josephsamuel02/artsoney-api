@@ -1,11 +1,14 @@
 import { Module } from "@nestjs/common";
-import { AnalyticsService } from "./analytics.service";
-import { AnalyticsController } from "./analytics.controller";
-import { JwtModule } from "@nestjs/jwt";
-import { PassportModule } from "@nestjs/passport";
+
 import { PrismaModule } from "src/prisma/prisma.module";
 import { PrismaService } from "src/prisma/prisma.service";
+import { PassportModule } from "@nestjs/passport";
+import { JwtModule } from "@nestjs/jwt";
+
 import { EncryptionService } from "src/shared";
+import { TransactionsService } from "./transactions.service";
+import { TransactionsController } from "./transactions.controller";
+import { MongoDBService } from "src/mongodb/mongodb.service";
 
 @Module({
   imports: [
@@ -22,8 +25,13 @@ import { EncryptionService } from "src/shared";
       },
     }),
   ],
-  exports: [AnalyticsService],
-  controllers: [AnalyticsController],
-  providers: [AnalyticsService, PrismaService, EncryptionService],
+  exports: [TransactionsService],
+  controllers: [TransactionsController],
+  providers: [
+    TransactionsService,
+    PrismaService,
+    MongoDBService,
+    EncryptionService,
+  ],
 })
-export class AnalyticsModule {}
+export class TransactionsModule {}

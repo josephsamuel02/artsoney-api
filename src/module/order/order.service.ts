@@ -5,14 +5,28 @@ import {
   InternalServerErrorException,
 } from "@nestjs/common";
 import { OrderDto } from "src/dtos/order.dto";
+import { TransactionsRecordDto } from "src/dtos/transactionRecord.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 
 @Injectable()
 export class OrderService {
   constructor(private readonly prisma: PrismaService) {}
 
-  public async createOrder(orderDto: OrderDto): Promise<any> {
+  public async createOrder(
+    orderDto: OrderDto,
+    transactionsRecordDto?: TransactionsRecordDto,
+  ): Promise<any> {
     try {
+      const user = await this.prisma.user.findUnique({
+        where: { userId: orderDto.userId },
+      });
+
+      if (!user) {
+        return new BadRequestException({
+          message: "Unable to find user account",
+        });
+      }
+
       const createOrder = await this.prisma.order.create({
         data: orderDto,
       });
@@ -21,6 +35,110 @@ export class OrderService {
         return new BadRequestException({
           message: "Unable to create order",
         });
+      }
+
+      // create transaction record for each product in the order
+      // and update the wallet,total_revenue and sales in the sales record of the product owner
+
+      // map through the product
+      // create a transaction template data
+      //multiply each product quantity times price to add to each product owner`s wallet
+      //
+
+      // Loop through products to create transaction records and update sales
+      for (const product of orderDto.products) {
+        const transactionTotalPrice = product.price * product.quantity;
+
+        const seller = await this.prisma.user.findUnique({
+          where: { userId: product.userId },
+        });
+
+        if (!seller) {
+          return new BadRequestException({
+            message: "Unable to find seller info",
+          });
+        }
+        // Create transaction record
+        const createTransactionRec =
+          await this.prisma.transactionsRecord.create({
+            data: {
+              buyer_information: {
+                userId: orderDto.userId,
+                user_name: user.user_name,
+                profile_image: user.profile_img,
+                buyer_account_name: user.user_name,
+              },
+              seller_information: {
+                userId: product.userId,
+                user_name: seller.user_name,
+                profile_image: seller.profile_img,
+                seller_account_name: seller.user_name,
+              },
+              products: {
+                product_id: product.product_id,
+                product_name: product.product_name,
+                product_image: product.product_image[0],
+                product_price: product.price,
+                quantity: product.quantity,
+              },
+              transaction_total_price: transactionTotalPrice,
+              transaction_status: "PENDING",
+              transaction_type: "PAYMENT",
+              transaction_image:
+                transactionsRecordDto?.transaction_image || null,
+              remark: "New order transaction",
+            },
+          });
+
+        if (!createTransactionRec) {
+          return new BadRequestException({
+            message: "Unable to create transaction record",
+          });
+        }
+
+        // Update seller   sales record
+        const sellerSales = await this.prisma.sales.findUnique({
+          where: { userId: product.userId },
+        });
+
+        const sellerNewBalance =
+          sellerSales.wallet.available_balance + transactionTotalPrice;
+
+        if (sellerSales) {
+          await this.prisma.sales.update({
+            where: { userId: product.userId },
+            data: {
+              total_revenue: {
+                increment: transactionTotalPrice,
+              },
+              wallet: {
+                available_balance: sellerNewBalance,
+              },
+              sales: {
+                increment: product.quantity,
+              },
+            },
+          });
+        }
+
+        // Update seller and buyer sales record
+
+        const buyerSales = await this.prisma.sales.findUnique({
+          where: { userId: orderDto.userId },
+        });
+        const buyerNewBalance =
+          buyerSales.wallet.available_balance - transactionTotalPrice;
+
+        if (buyerSales) {
+          await this.prisma.sales.update({
+            where: { userId: product.userId },
+            data: {
+              wallet: {
+                available_balance: buyerNewBalance,
+              },
+            },
+          });
+        }
       }
 
       return {
@@ -98,6 +216,22 @@ export class OrderService {
       status: 200,
       message: "success",
       data: order,
+    };
+  }
+
+  async getAllUserOrders(orderDto: OrderDto) {
+    const orders = await this.prisma.order.findMany({
+      where: { userId: orderDto.userId },
+    });
+
+    if (!orders) {
+      throw new NotFoundException("Order not found");
+    }
+
+    return {
+      status: 200,
+      message: "success",
+      data: orders,
     };
   }
 

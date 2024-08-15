@@ -75,6 +75,23 @@ let AuthService = class AuthService {
                     message: "Unable to create user profile",
                 });
             }
+            const salesRecord = {
+                userId: createAuth.userId,
+                total_revenue: 0,
+                wallet: {
+                    available_balance: 0,
+                    pending_balance: 0,
+                },
+                sales: 0,
+            };
+            const sales = await this.prisma.sales.create({
+                data: salesRecord,
+            });
+            if (!sales) {
+                throw new common_1.BadRequestException({
+                    message: "Unable to create sales record",
+                });
+            }
             return {
                 status: 200,
                 message: "Artsony account created successfully",

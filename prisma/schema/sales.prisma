@@ -1,0 +1,23 @@
+model sales {
+    id               String            @id @default(auto()) @map("_id") @db.ObjectId
+    userId           String            @unique
+    storeId          String?           @unique
+    total_revenue    Int?
+    wallet           Wallet?
+    sales            Int
+    artsony_score    Int?
+    bank_information BankInformation[]
+    createdAt        DateTime?         @default(now())
+    updatedAt        DateTime?         @updatedAt
+}
+
+type Wallet {
+    available_balance Int?
+    pending_balance   Int?
+}
+
+type BankInformation {
+    bank_name      String?
+    account_name   String?
+    account_number Int?
+}

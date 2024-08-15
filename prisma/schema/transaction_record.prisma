@@ -1,0 +1,48 @@
+model TransactionsRecord {
+    transaction_id          String              @id @default(auto()) @map("_id") @db.ObjectId
+    buyer_information       Buyer_information?
+    seller_information      Seller_information?
+    products                Product
+    transaction_total_price Int?
+    from                    String?
+    transaction_status      Transaction_status?
+    transaction_type        Transaction_type
+    transaction_image       String?
+    remark                  String?
+    createdAt               DateTime?           @default(now())
+    updatedAt               DateTime?           @updatedAt
+}
+
+type Buyer_information {
+    userId             String
+    user_name          String?
+    profile_image      String?
+    buyer_account_name String?
+}
+
+type Seller_information {
+    userId              String
+    user_name           String?
+    profile_image       String?
+    seller_account_name String?
+}
+
+type Product {
+    product_id    String
+    product_name  String
+    product_image String
+    product_price Int
+    quantity      Int
+}
+
+enum Transaction_status {
+    PENDING
+    FAILED
+    SUCCESSFUL
+}
+
+enum Transaction_type {
+    PAYMENT
+    WITHDRAWAL
+    FUND_WALLET
+}

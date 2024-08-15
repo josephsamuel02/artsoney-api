@@ -14,7 +14,9 @@ const prisma_module_1 = require("./prisma/prisma.module");
 const artwork_module_1 = require("./module/Artwork/artwork.module");
 const cart_module_1 = require("./module/cart/cart.module");
 const order_module_1 = require("./module/order/order.module");
-const analytics_module_1 = require("./module/analytics/analytics.module");
+const sales_module_1 = require("./module/sales/sales.module");
+const transactions_module_1 = require("./module/transactions/transactions.module");
+const mongodb_module_1 = require("./mongodb/mongodb.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
@@ -22,12 +24,14 @@ exports.AppModule = AppModule = __decorate([
     (0, common_1.Module)({
         imports: [
             prisma_module_1.PrismaModule,
+            mongodb_module_1.MongoDBModule,
             user_module_1.UserModule,
             auth_module_1.AuthModule,
             artwork_module_1.ArtworkModule,
             cart_module_1.CartModule,
             order_module_1.OrderModule,
-            analytics_module_1.AnalyticsModule,
+            sales_module_1.SalesModule,
+            transactions_module_1.TransactionsModule,
         ],
     })
 ], AppModule);

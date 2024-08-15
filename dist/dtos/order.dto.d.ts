@@ -19,6 +19,7 @@ interface products {
     userId?: string;
     storeId?: string;
     product_id?: string;
+    product_name?: string;
     product_image: string[];
     product_title?: string;
     price?: number;

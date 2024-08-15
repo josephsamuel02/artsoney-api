@@ -12,53 +12,53 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnalyticsController = void 0;
+exports.SalesController = void 0;
 const common_1 = require("@nestjs/common");
-const analytics_service_1 = require("./analytics.service");
-const createAnalytics_dto_1 = require("../../dtos/createAnalytics.dto");
 const updateAnalytics_dto_1 = require("../../dtos/updateAnalytics.dto");
 const swagger_1 = require("@nestjs/swagger");
-let AnalyticsController = class AnalyticsController {
-    constructor(analyticsService) {
-        this.analyticsService = analyticsService;
+const sales_dto_1 = require("../../dtos/sales.dto");
+const sales_service_1 = require("./sales.service");
+let SalesController = class SalesController {
+    constructor(salesService) {
+        this.salesService = salesService;
     }
-    create(createAnalyticsDto) {
-        return this.analyticsService.create(createAnalyticsDto);
+    create(salesDto) {
+        return this.salesService.create(salesDto);
     }
     findAll() {
-        return this.analyticsService.findAll();
+        return this.salesService.findAll();
     }
     findOne(id) {
-        return this.analyticsService.findOne(+id);
+        return this.salesService.findOne(+id);
     }
     update(id, updateAnalyticsDto) {
-        return this.analyticsService.update(+id, updateAnalyticsDto);
+        return this.salesService.update(+id, updateAnalyticsDto);
     }
     remove(id) {
-        return this.analyticsService.remove(+id);
+        return this.salesService.remove(+id);
     }
 };
-exports.AnalyticsController = AnalyticsController;
+exports.SalesController = SalesController;
 __decorate([
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [createAnalytics_dto_1.CreateAnalyticsDto]),
+    __metadata("design:paramtypes", [sales_dto_1.SalesDto]),
     __metadata("design:returntype", void 0)
-], AnalyticsController.prototype, "create", null);
+], SalesController.prototype, "create", null);
 __decorate([
     (0, common_1.Get)(),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
-], AnalyticsController.prototype, "findAll", null);
+], SalesController.prototype, "findAll", null);
 __decorate([
     (0, common_1.Get)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], AnalyticsController.prototype, "findOne", null);
+], SalesController.prototype, "findOne", null);
 __decorate([
     (0, common_1.Patch)(":id"),
     __param(0, (0, common_1.Param)("id")),
@@ -66,17 +66,17 @@ __decorate([
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String, updateAnalytics_dto_1.UpdateAnalyticsDto]),
     __metadata("design:returntype", void 0)
-], AnalyticsController.prototype, "update", null);
+], SalesController.prototype, "update", null);
 __decorate([
     (0, common_1.Delete)(":id"),
     __param(0, (0, common_1.Param)("id")),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
-], AnalyticsController.prototype, "remove", null);
-exports.AnalyticsController = AnalyticsController = __decorate([
-    (0, swagger_1.ApiTags)("analytics"),
-    (0, common_1.Controller)("analytics"),
-    __metadata("design:paramtypes", [analytics_service_1.AnalyticsService])
-], AnalyticsController);
-//# sourceMappingURL=analytics.controller.js.map
+], SalesController.prototype, "remove", null);
+exports.SalesController = SalesController = __decorate([
+    (0, swagger_1.ApiTags)("sales"),
+    (0, common_1.Controller)("sales"),
+    __metadata("design:paramtypes", [sales_service_1.SalesService])
+], SalesController);
+//# sourceMappingURL=sales.controller.js.map

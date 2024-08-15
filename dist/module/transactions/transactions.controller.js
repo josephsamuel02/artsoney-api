@@ -12,83 +12,69 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderController = void 0;
+exports.TransactionsController = void 0;
 const common_1 = require("@nestjs/common");
-const order_dto_1 = require("../../dtos/order.dto");
-const order_service_1 = require("./order.service");
 const jwt_auth_guard_1 = require("../../validation/jwt-auth.guard");
 const swagger_1 = require("@nestjs/swagger");
 const transactionRecord_dto_1 = require("../../dtos/transactionRecord.dto");
-let OrderController = class OrderController {
-    constructor(orderService) {
-        this.orderService = orderService;
+const transactions_service_1 = require("./transactions.service");
+let TransactionsController = class TransactionsController {
+    constructor(transactionsService) {
+        this.transactionsService = transactionsService;
     }
-    createOrder(orderDto, transactionsRecordDto) {
-        return this.orderService.createOrder(orderDto, transactionsRecordDto);
+    createTransactions(transactionsRecordDto) {
+        return this.transactionsService.createTransactions(transactionsRecordDto);
     }
-    updateOrder(orderDto) {
-        return this.orderService.updateOrder(orderDto);
+    getAllTransactions(transactionsRecordDto) {
+        return this.transactionsService.getAllTransactionsHistory(transactionsRecordDto);
     }
-    getOrderById(id) {
-        return this.orderService.getOrderById(id);
+    getTransactionById(transactionsRecordDto) {
+        return this.transactionsService.getTransactionById(transactionsRecordDto);
     }
-    getAllUserOrders(orderDto) {
-        return this.orderService.getAllUserOrders(orderDto);
-    }
-    deleteOrder(orderDto) {
-        return this.orderService.deleteOrder(orderDto);
+    updateTransactionsHistory(transactionsRecordDto) {
+        return this.transactionsService.updateTransactionsHistory(transactionsRecordDto);
     }
 };
-exports.OrderController = OrderController;
+exports.TransactionsController = TransactionsController;
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.Post)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [order_dto_1.OrderDto,
-        transactionRecord_dto_1.TransactionsRecordDto]),
+    __metadata("design:paramtypes", [transactionRecord_dto_1.TransactionsRecordDto]),
     __metadata("design:returntype", void 0)
-], OrderController.prototype, "createOrder", null);
+], TransactionsController.prototype, "createTransactions", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
-    (0, common_1.Put)(),
+    (0, common_1.Get)("history"),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [order_dto_1.OrderDto]),
+    __metadata("design:paramtypes", [transactionRecord_dto_1.TransactionsRecordDto]),
     __metadata("design:returntype", void 0)
-], OrderController.prototype, "updateOrder", null);
-__decorate([
-    (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
-    (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
-    (0, common_1.Get)(":id"),
-    __param(0, (0, common_1.Param)("id")),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String]),
-    __metadata("design:returntype", void 0)
-], OrderController.prototype, "getOrderById", null);
+], TransactionsController.prototype, "getAllTransactions", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
     (0, common_1.Get)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [order_dto_1.OrderDto]),
+    __metadata("design:paramtypes", [transactionRecord_dto_1.TransactionsRecordDto]),
     __metadata("design:returntype", void 0)
-], OrderController.prototype, "getAllUserOrders", null);
+], TransactionsController.prototype, "getTransactionById", null);
 __decorate([
     (0, common_1.UseGuards)(jwt_auth_guard_1.JwtAuthGuard),
     (0, common_1.UseInterceptors)(common_1.ClassSerializerInterceptor),
-    (0, common_1.Delete)(":id"),
+    (0, common_1.Put)(),
     __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [order_dto_1.OrderDto]),
+    __metadata("design:paramtypes", [transactionRecord_dto_1.TransactionsRecordDto]),
     __metadata("design:returntype", void 0)
-], OrderController.prototype, "deleteOrder", null);
-exports.OrderController = OrderController = __decorate([
-    (0, swagger_1.ApiTags)("orders"),
-    (0, common_1.Controller)("orders"),
-    __metadata("design:paramtypes", [order_service_1.OrderService])
-], OrderController);
-//# sourceMappingURL=order.controller.js.map
+], TransactionsController.prototype, "updateTransactionsHistory", null);
+exports.TransactionsController = TransactionsController = __decorate([
+    (0, swagger_1.ApiTags)("transactions"),
+    (0, common_1.Controller)("transactions"),
+    __metadata("design:paramtypes", [transactions_service_1.TransactionsService])
+], TransactionsController);
+//# sourceMappingURL=transactions.controller.js.map

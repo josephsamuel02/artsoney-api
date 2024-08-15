@@ -6,19 +6,19 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnalyticsModule = void 0;
+exports.SalesModule = void 0;
 const common_1 = require("@nestjs/common");
-const analytics_service_1 = require("./analytics.service");
-const analytics_controller_1 = require("./analytics.controller");
 const jwt_1 = require("@nestjs/jwt");
 const passport_1 = require("@nestjs/passport");
 const prisma_module_1 = require("../../prisma/prisma.module");
 const prisma_service_1 = require("../../prisma/prisma.service");
 const shared_1 = require("../../shared");
-let AnalyticsModule = class AnalyticsModule {
+const sales_controller_1 = require("./sales.controller");
+const sales_service_1 = require("./sales.service");
+let SalesModule = class SalesModule {
 };
-exports.AnalyticsModule = AnalyticsModule;
-exports.AnalyticsModule = AnalyticsModule = __decorate([
+exports.SalesModule = SalesModule;
+exports.SalesModule = SalesModule = __decorate([
     (0, common_1.Module)({
         imports: [
             prisma_module_1.PrismaModule,
@@ -34,9 +34,9 @@ exports.AnalyticsModule = AnalyticsModule = __decorate([
                 },
             }),
         ],
-        exports: [analytics_service_1.AnalyticsService],
-        controllers: [analytics_controller_1.AnalyticsController],
-        providers: [analytics_service_1.AnalyticsService, prisma_service_1.PrismaService, shared_1.EncryptionService],
+        exports: [sales_service_1.SalesService],
+        controllers: [sales_controller_1.SalesController],
+        providers: [sales_service_1.SalesService, prisma_service_1.PrismaService, shared_1.EncryptionService],
     })
-], AnalyticsModule);
-//# sourceMappingURL=analytics.module.js.map
+], SalesModule);
+//# sourceMappingURL=sales.module.js.map

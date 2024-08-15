@@ -22,6 +22,7 @@ type products {
     userId        String?
     storeId       String?
     product_id    String?
+    product_name  String?
     product_image String[]
     product_title String?
     price         Int?

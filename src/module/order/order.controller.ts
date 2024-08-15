@@ -16,6 +16,7 @@ import { OrderService } from "./order.service";
 
 import { JwtAuthGuard } from "src/validation/jwt-auth.guard";
 import { ApiTags } from "@nestjs/swagger";
+import { TransactionsRecordDto } from "src/dtos/transactionRecord.dto";
 
 @ApiTags("orders")
 @Controller("orders")
@@ -25,8 +26,11 @@ export class OrderController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()
-  createOrder(@Body() orderDto: OrderDto) {
-    return this.orderService.createOrder(orderDto);
+  createOrder(
+    @Body() orderDto: OrderDto,
+    transactionsRecordDto?: TransactionsRecordDto,
+  ) {
+    return this.orderService.createOrder(orderDto, transactionsRecordDto);
   }
 
   @UseGuards(JwtAuthGuard)
@@ -41,6 +45,13 @@ export class OrderController {
   @Get(":id")
   getOrderById(@Param("id") id: string) {
     return this.orderService.getOrderById(id);
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get()
+  getAllUserOrders(@Body() orderDto: OrderDto) {
+    return this.orderService.getAllUserOrders(orderDto);
   }
 
   @UseGuards(JwtAuthGuard)

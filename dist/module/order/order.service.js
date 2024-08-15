@@ -16,8 +16,16 @@ let OrderService = class OrderService {
     constructor(prisma) {
         this.prisma = prisma;
     }
-    async createOrder(orderDto) {
+    async createOrder(orderDto, transactionsRecordDto) {
         try {
+            const user = await this.prisma.user.findUnique({
+                where: { userId: orderDto.userId },
+            });
+            if (!user) {
+                return new common_1.BadRequestException({
+                    message: "Unable to find user account",
+                });
+            }
             const createOrder = await this.prisma.order.create({
                 data: orderDto,
             });
@@ -25,6 +33,84 @@ let OrderService = class OrderService {
                 return new common_1.BadRequestException({
                     message: "Unable to create order",
                 });
+            }
+            for (const product of orderDto.products) {
+                const transactionTotalPrice = product.price * product.quantity;
+                const seller = await this.prisma.user.findUnique({
+                    where: { userId: product.userId },
+                });
+                if (!seller) {
+                    return new common_1.BadRequestException({
+                        message: "Unable to find seller info",
+                    });
+                }
+                const createTransactionRec = await this.prisma.transactionsRecord.create({
+                    data: {
+                        buyer_information: {
+                            userId: orderDto.userId,
+                            user_name: user.user_name,
+                            profile_image: user.profile_img,
+                            buyer_account_name: user.user_name,
+                        },
+                        seller_information: {
+                            userId: product.userId,
+                            user_name: seller.user_name,
+                            profile_image: seller.profile_img,
+                            seller_account_name: seller.user_name,
+                        },
+                        products: {
+                            product_id: product.product_id,
+                            product_name: product.product_name,
+                            product_image: product.product_image[0],
+                            product_price: product.price,
+                            quantity: product.quantity,
+                        },
+                        transaction_total_price: transactionTotalPrice,
+                        transaction_status: "PENDING",
+                        transaction_type: "PAYMENT",
+                        transaction_image: transactionsRecordDto?.transaction_image || null,
+                        remark: "New order transaction",
+                    },
+                });
+                if (!createTransactionRec) {
+                    return new common_1.BadRequestException({
+                        message: "Unable to create transaction record",
+                    });
+                }
+                const sellerSales = await this.prisma.sales.findUnique({
+                    where: { userId: product.userId },
+                });
+                const sellerNewBalance = sellerSales.wallet.available_balance + transactionTotalPrice;
+                if (sellerSales) {
+                    await this.prisma.sales.update({
+                        where: { userId: product.userId },
+                        data: {
+                            total_revenue: {
+                                increment: transactionTotalPrice,
+                            },
+                            wallet: {
+                                available_balance: sellerNewBalance,
+                            },
+                            sales: {
+                                increment: product.quantity,
+                            },
+                        },
+                    });
+                }
+                const buyerSales = await this.prisma.sales.findUnique({
+                    where: { userId: orderDto.userId },
+                });
+                const buyerNewBalance = buyerSales.wallet.available_balance - transactionTotalPrice;
+                if (buyerSales) {
+                    await this.prisma.sales.update({
+                        where: { userId: product.userId },
+                        data: {
+                            wallet: {
+                                available_balance: buyerNewBalance,
+                            },
+                        },
+                    });
+                }
             }
             return {
                 status: 200,
@@ -93,6 +179,19 @@ let OrderService = class OrderService {
             status: 200,
             message: "success",
             data: order,
+        };
+    }
+    async getAllUserOrders(orderDto) {
+        const orders = await this.prisma.order.findMany({
+            where: { userId: orderDto.userId },
+        });
+        if (!orders) {
+            throw new common_1.NotFoundException("Order not found");
+        }
+        return {
+            status: 200,
+            message: "success",
+            data: orders,
         };
     }
     async deleteOrder(orderDto) {

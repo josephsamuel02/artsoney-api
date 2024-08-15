@@ -6,11 +6,11 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AnalyticsService = void 0;
+exports.SalesService = void 0;
 const common_1 = require("@nestjs/common");
-let AnalyticsService = class AnalyticsService {
-    create(createAnalyticsDto) {
-        return `This action adds a new analytics ${createAnalyticsDto}`;
+let SalesService = class SalesService {
+    create(salesDto) {
+        return `This action adds a new analytics ${salesDto}`;
     }
     findAll() {
         return `This action returns all analytics`;
@@ -18,15 +18,15 @@ let AnalyticsService = class AnalyticsService {
     findOne(id) {
         return `This action returns a #${id} analytics`;
     }
-    update(id, updateAnalyticsDto) {
-        return `This action updates a #${id} analytics ${updateAnalyticsDto}`;
+    update(id, salesDto) {
+        return `This action updates a #${id} analytics ${salesDto}`;
     }
     remove(id) {
         return `This action removes a #${id} analytics`;
     }
 };
-exports.AnalyticsService = AnalyticsService;
-exports.AnalyticsService = AnalyticsService = __decorate([
+exports.SalesService = SalesService;
+exports.SalesService = SalesService = __decorate([
     (0, common_1.Injectable)()
-], AnalyticsService);
-//# sourceMappingURL=analytics.service.js.map
+], SalesService);
+//# sourceMappingURL=sales.service.js.map

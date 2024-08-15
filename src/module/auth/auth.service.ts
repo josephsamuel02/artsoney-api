@@ -71,6 +71,7 @@ export class AuthService {
         email: email,
         user_name: user_name,
       };
+
       const newUser = await this.prisma.user.create({ data: userInfo });
 
       if (!newUser) {
@@ -92,6 +93,27 @@ export class AuthService {
       if (!account) {
         throw new BadRequestException({
           message: "Unable to create user profile",
+        });
+      }
+
+      // create sales record
+      const salesRecord = {
+        userId: createAuth.userId,
+        total_revenue: 0,
+        wallet: {
+          available_balance: 0,
+          pending_balance: 0,
+        },
+        sales: 0,
+      };
+
+      const sales = await this.prisma.sales.create({
+        data: salesRecord,
+      });
+
+      if (!sales) {
+        throw new BadRequestException({
+          message: "Unable to create sales record",
         });
       }
 
@@ -157,7 +179,9 @@ export class AuthService {
         userId: userExist.userId,
         password: userExist.password,
       });
+
       delete userExist.password;
+
       return {
         access_token: signedUserToken,
         status: 200,
