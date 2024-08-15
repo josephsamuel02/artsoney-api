@@ -1,4 +1,4 @@
-model TransactionsRecord {
+model transactionsRecord {
     transaction_id          String              @id @default(auto()) @map("_id") @db.ObjectId
     buyer_information       Buyer_information?
     seller_information      Seller_information?

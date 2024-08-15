@@ -13,8 +13,8 @@ model sales {
 
 // Type for Wallet
 type Wallet {
-    available_alance Int?
-    pending_alance   Int?
+    available_balance Int?
+    pending_balance   Int?
 }
 
 // Type for BankInformation
