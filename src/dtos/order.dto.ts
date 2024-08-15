@@ -5,6 +5,7 @@ import {
   IsOptional,
   IsString,
 } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 enum order_status {
   PENDING,
@@ -38,31 +39,39 @@ interface products {
 }
 
 export class OrderDto {
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   order_id?: string;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   userId: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   products: products[];
 
+  @ApiPropertyOptional()
   @IsOptional()
   billing?: Billing;
 
+  @ApiPropertyOptional()
   @IsOptional()
   shipping?: Shipping;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   quantity?: number;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   total_price?: number;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsEnum(order_status)
   status?: any | string | order_status; // Use the imported Prisma enum

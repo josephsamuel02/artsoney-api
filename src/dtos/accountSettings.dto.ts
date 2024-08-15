@@ -1,30 +1,39 @@
 import { IsEmail, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class AccountSettingsDto {
+  @ApiProperty()
   @IsNotEmpty()
   @IsString()
   userId: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsEmail()
   email?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   artsony_link?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   notification?: Notification;
 
+  @ApiPropertyOptional()
   @IsOptional()
   privacy_settings?: PrivacySettings;
 
+  @ApiPropertyOptional()
   @IsOptional()
   blocking?: Blocking[];
 
+  @ApiPropertyOptional()
   @IsOptional()
   billing?: Billing;
 
+  @ApiPropertyOptional()
   @IsOptional()
   shipping?: Shipping;
 }

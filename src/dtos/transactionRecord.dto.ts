@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsOptional, IsString, IsEnum } from "class-validator";
+import { ApiPropertyOptional } from "@nestjs/swagger";
 
 interface BuyerInformation {
   userId: string;
@@ -35,41 +36,52 @@ enum TransactionType {
 }
 
 export class TransactionsRecordDto {
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   transaction_id?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   userId?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   buyer_information?: BuyerInformation;
 
+  @ApiPropertyOptional()
   @IsOptional()
   seller_information?: SellerInformation;
 
+  @ApiPropertyOptional()
   @IsOptional()
   products: Product;
 
+  @ApiPropertyOptional()
   @IsOptional()
   transaction_total_price?: number;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   from?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsEnum(TransactionStatus)
   transaction_status?: TransactionStatus;
 
+  @ApiProperty()
   @IsNotEmpty()
   @IsEnum(TransactionType)
   transaction_type: TransactionType;
 
+  @ApiPropertyOptional()
   @IsOptional()
   transaction_image?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   remark?: string;
 }

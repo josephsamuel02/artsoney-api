@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsNumber, IsOptional, IsString } from "class-validator";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 interface Wallet {
   available_balance?: number;
@@ -29,27 +30,33 @@ interface Rating {
 
 export class SalesDto {
   @IsString()
+  @ApiProperty()
   @IsNotEmpty()
   userId: string;
 
-  @IsOptional()
+  @ApiPropertyOptional()
   @IsOptional()
   storeId?: string;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   total_revenue?: number;
 
+  @ApiPropertyOptional()
   @IsOptional()
   wallet?: Wallet;
 
+  @ApiPropertyOptional()
   @IsOptional()
   @IsNumber()
   sales?: number;
 
+  @ApiPropertyOptional()
   @IsOptional()
   rating?: Rating;
 
+  @ApiPropertyOptional()
   @IsOptional()
   bank_information?: BankInformation[];
 }

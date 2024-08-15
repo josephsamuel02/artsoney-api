@@ -1,7 +1,9 @@
 import { Injectable } from "@nestjs/common";
+import { ApiTags } from "@nestjs/swagger";
 import { SalesDto } from "src/dtos/sales.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 
+@ApiTags("auth")
 @Injectable()
 export class SalesService {
   constructor(private readonly prisma: PrismaService) {}
