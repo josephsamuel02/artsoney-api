@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsOptional, IsString, IsEnum } from "class-validator";
-import { ApiPropertyOptional } from "@nestjs/swagger";
+import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 interface BuyerInformation {
   userId: string;
