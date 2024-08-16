@@ -8,8 +8,6 @@ export declare class AuthService {
     private jwtService;
     private encryptionService;
     constructor(prisma: PrismaService, jwtService: JwtService, encryptionService: EncryptionService);
-    private logger;
-    test(data: any): Promise<any>;
     createUser(createUserDto: CreateUserDto): Promise<any>;
     login(loginUserDto: LoginUserDto): Promise<{
         access_token: string;

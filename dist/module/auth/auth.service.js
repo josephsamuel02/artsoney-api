@@ -19,11 +19,6 @@ let AuthService = class AuthService {
         this.prisma = prisma;
         this.jwtService = jwtService;
         this.encryptionService = encryptionService;
-        this.logger = new common_1.Logger("createUser");
-    }
-    async test(data) {
-        this.logger.log("test");
-        return data;
     }
     async createUser(createUserDto) {
         try {

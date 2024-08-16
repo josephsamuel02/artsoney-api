@@ -11,7 +11,9 @@ import { ClassSerializerInterceptor } from "@nestjs/common";
 import { SalesService } from "./sales.service";
 import { JwtAuthGuard } from "src/validation/jwt-auth.guard";
 import { SalesDto } from "src/dtos/sales.dto";
+import { ApiTags } from "@nestjs/swagger";
 
+@ApiTags("sales")
 @Controller("sales")
 @UseGuards(JwtAuthGuard)
 @UseInterceptors(ClassSerializerInterceptor)
@@ -23,7 +25,7 @@ export class SalesController {
     return await this.salesService.findByUserId(userId);
   }
 
-  @Put(":userId")
+  @Put()
   async updateSales(@Body() salesDto: SalesDto): Promise<any> {
     return await this.salesService.updateSales(salesDto);
   }

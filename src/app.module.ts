@@ -8,6 +8,7 @@ import { OrderModule } from "./module/order/order.module";
 import { SalesModule } from "./module/sales/sales.module";
 import { TransactionsModule } from "./module/transactions/transactions.module";
 import { MongoDBModule } from "./mongodb/mongodb.module";
+import { ReviewsModule } from "./module/review/reviews.module";
 
 @Module({
   imports: [
@@ -20,6 +21,7 @@ import { MongoDBModule } from "./mongodb/mongodb.module";
     OrderModule,
     SalesModule,
     TransactionsModule,
+    ReviewsModule,
   ],
 })
 export class AppModule {}

@@ -9,62 +9,58 @@ var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.OrderDto = void 0;
+exports.ReviewsDto = void 0;
 const class_validator_1 = require("class-validator");
 const swagger_1 = require("@nestjs/swagger");
-var order_status;
-(function (order_status) {
-    order_status[order_status["PENDING"] = 0] = "PENDING";
-    order_status[order_status["SHIPPED"] = 1] = "SHIPPED";
-    order_status[order_status["DELIVERED"] = 2] = "DELIVERED";
-    order_status[order_status["CANCELLED"] = 3] = "CANCELLED";
-})(order_status || (order_status = {}));
-class OrderDto {
+class ReviewsDto {
 }
-exports.OrderDto = OrderDto;
+exports.ReviewsDto = ReviewsDto;
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], OrderDto.prototype, "order_id", void 0);
+], ReviewsDto.prototype, "id", void 0);
 __decorate([
     (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
-], OrderDto.prototype, "userId", void 0);
+], ReviewsDto.prototype, "userId", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ReviewsDto.prototype, "product_id", void 0);
+__decorate([
+    (0, swagger_1.ApiProperty)(),
+    (0, class_validator_1.IsNotEmpty)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ReviewsDto.prototype, "storeId", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ReviewsDto.prototype, "profile_image", void 0);
+__decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
     __metadata("design:type", Array)
-], OrderDto.prototype, "products", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Object)
-], OrderDto.prototype, "billing", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    __metadata("design:type", Object)
-], OrderDto.prototype, "shipping", void 0);
+], ReviewsDto.prototype, "product_image", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsNumber)(),
     __metadata("design:type", Number)
-], OrderDto.prototype, "quantity", void 0);
+], ReviewsDto.prototype, "rating", void 0);
 __decorate([
     (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsNumber)(),
-    __metadata("design:type", Number)
-], OrderDto.prototype, "total_price", void 0);
-__decorate([
-    (0, swagger_1.ApiPropertyOptional)(),
-    (0, class_validator_1.IsOptional)(),
-    (0, class_validator_1.IsEnum)(order_status),
-    __metadata("design:type", Object)
-], OrderDto.prototype, "status", void 0);
-//# sourceMappingURL=order.dto.js.map
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], ReviewsDto.prototype, "review", void 0);
+//# sourceMappingURL=reviews.dto.js.map

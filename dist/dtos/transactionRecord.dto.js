@@ -11,6 +11,7 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.TransactionsRecordDto = void 0;
 const class_validator_1 = require("class-validator");
+const swagger_1 = require("@nestjs/swagger");
 var TransactionStatus;
 (function (TransactionStatus) {
     TransactionStatus["PENDING"] = "PENDING";
@@ -27,51 +28,62 @@ class TransactionsRecordDto {
 }
 exports.TransactionsRecordDto = TransactionsRecordDto;
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], TransactionsRecordDto.prototype, "transaction_id", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], TransactionsRecordDto.prototype, "userId", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
 ], TransactionsRecordDto.prototype, "buyer_information", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
 ], TransactionsRecordDto.prototype, "seller_information", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Object)
 ], TransactionsRecordDto.prototype, "products", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", Number)
 ], TransactionsRecordDto.prototype, "transaction_total_price", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsString)(),
     __metadata("design:type", String)
 ], TransactionsRecordDto.prototype, "from", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     (0, class_validator_1.IsEnum)(TransactionStatus),
     __metadata("design:type", String)
 ], TransactionsRecordDto.prototype, "transaction_status", void 0);
 __decorate([
+    (0, swagger_1.ApiProperty)(),
     (0, class_validator_1.IsNotEmpty)(),
     (0, class_validator_1.IsEnum)(TransactionType),
     __metadata("design:type", String)
 ], TransactionsRecordDto.prototype, "transaction_type", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], TransactionsRecordDto.prototype, "transaction_image", void 0);
 __decorate([
+    (0, swagger_1.ApiPropertyOptional)(),
     (0, class_validator_1.IsOptional)(),
     __metadata("design:type", String)
 ], TransactionsRecordDto.prototype, "remark", void 0);

@@ -1,8 +1,8 @@
 import { SalesDto } from "src/dtos/sales.dto";
+import { PrismaService } from "src/prisma/prisma.service";
 export declare class SalesService {
-    create(salesDto: SalesDto): string;
-    findAll(): string;
-    findOne(id: number): string;
-    update(id: number, salesDto: SalesDto): string;
-    remove(id: number): string;
+    private readonly prisma;
+    constructor(prisma: PrismaService);
+    findByUserId(userId: any): Promise<any>;
+    updateSales(salesDto: SalesDto): Promise<any>;
 }
