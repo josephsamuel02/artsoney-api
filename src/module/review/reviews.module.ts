@@ -5,6 +5,7 @@ import { PassportModule } from "@nestjs/passport";
 import { PrismaModule } from "src/prisma/prisma.module";
 import { PrismaService } from "src/prisma/prisma.service";
 import { ReviewsService } from "./reviews.service";
+import { EncryptionService } from "src/shared";
 
 @Module({
   imports: [
@@ -25,6 +26,6 @@ import { ReviewsService } from "./reviews.service";
 
   exports: [ReviewsService],
   controllers: [ReviewsController],
-  providers: [ReviewsService, PrismaService],
+  providers: [ReviewsService, PrismaService, EncryptionService],
 })
 export class ReviewsModule {}

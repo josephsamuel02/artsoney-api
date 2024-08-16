@@ -4,11 +4,11 @@ import {
   NotFoundException,
 } from "@nestjs/common";
 import { ReviewsDto } from "src/dtos/reviews.dto";
-import { PrismaService } from "src/prisma/prisma.service";
 
+import { PrismaService } from "src/prisma/prisma.service";
 @Injectable()
 export class ReviewsService {
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
   async createReview(reviewsDto: ReviewsDto) {
     const review = await this.prisma.review.create({
