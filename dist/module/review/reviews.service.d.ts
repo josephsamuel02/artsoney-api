@@ -2,7 +2,7 @@ import { BadRequestException } from "@nestjs/common";
 import { ReviewsDto } from "src/dtos/reviews.dto";
 import { PrismaService } from "src/prisma/prisma.service";
 export declare class ReviewsService {
-    private prisma;
+    private readonly prisma;
     constructor(prisma: PrismaService);
     createReview(reviewsDto: ReviewsDto): Promise<BadRequestException | {
         status: number;

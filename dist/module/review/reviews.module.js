@@ -14,6 +14,7 @@ const passport_1 = require("@nestjs/passport");
 const prisma_module_1 = require("../../prisma/prisma.module");
 const prisma_service_1 = require("../../prisma/prisma.service");
 const reviews_service_1 = require("./reviews.service");
+const shared_1 = require("../../shared");
 let ReviewsModule = class ReviewsModule {
 };
 exports.ReviewsModule = ReviewsModule;
@@ -35,7 +36,7 @@ exports.ReviewsModule = ReviewsModule = __decorate([
         ],
         exports: [reviews_service_1.ReviewsService],
         controllers: [reviews_controller_1.ReviewsController],
-        providers: [reviews_service_1.ReviewsService, prisma_service_1.PrismaService],
+        providers: [reviews_service_1.ReviewsService, prisma_service_1.PrismaService, shared_1.EncryptionService],
     })
 ], ReviewsModule);
 //# sourceMappingURL=reviews.module.js.map
