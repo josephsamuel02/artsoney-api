@@ -17,7 +17,7 @@ const order_module_1 = require("./module/order/order.module");
 const sales_module_1 = require("./module/sales/sales.module");
 const transactions_module_1 = require("./module/transactions/transactions.module");
 const mongodb_module_1 = require("./mongodb/mongodb.module");
-const reviews_module_1 = require("./module/review/reviews.module");
+const reviews_module_1 = require("./module/reviews/reviews.module");
 let AppModule = class AppModule {
 };
 exports.AppModule = AppModule;
