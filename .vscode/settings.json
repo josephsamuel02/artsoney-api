@@ -9,6 +9,7 @@
         "nestjs",
         "tiktok",
         "userbyemail",
-        "usercreated"
+        "usercreated",
+        "websockets"
     ]
 }

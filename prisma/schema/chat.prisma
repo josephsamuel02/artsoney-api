@@ -1,0 +1,20 @@
+type Content {
+    user_id   String?
+    text      String?
+    video     String?
+    url       String?
+    audio     String?
+    image     String?
+    gif       String?
+    svg       String?
+    createdAt DateTime @default(now())
+}
+
+model Chat {
+    id        String    @id @default(auto()) @map("_id") @db.ObjectId
+    sender    String
+    receiver  String?
+    content   Content[]
+    createdAt DateTime  @default(now())
+    updatedAt DateTime  @updatedAt
+}
