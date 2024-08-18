@@ -52,7 +52,7 @@ export class ChatService {
       });
 
       if (!conversation) {
-        return this.prisma.chat.create({
+        await this.prisma.chat.create({
           data: {
             sender: getChatMessageDto.sender,
             receiver: getChatMessageDto.receiver,
