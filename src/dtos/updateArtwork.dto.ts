@@ -8,6 +8,11 @@ import {
 } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
+enum Artwork_type {
+  physical,
+  digital,
+}
+
 export class UpdateArtwork {
   @IsString()
   @ApiProperty()
@@ -48,6 +53,10 @@ export class UpdateArtwork {
   @ApiPropertyOptional()
   @IsOptional()
   art_field?: string[];
+
+  @ApiProperty()
+  @IsNotEmpty()
+  artwork_type: Artwork_type;
 
   @IsString()
   @ApiPropertyOptional()

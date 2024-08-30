@@ -15,6 +15,7 @@ model artwork {
     co_owners         co_owners[]
     designed_for      String[]
 
+    artwork_type                       Artwork_type
     appreciation                       String[]
     dimensions                         Dimensions?
     images                             String[]
@@ -74,4 +75,9 @@ enum Certificate_of_authentication_type {
     physical
     digital
     hyprid
+}
+
+enum Artwork_type {
+    physical
+    digital
 }
