@@ -91,7 +91,6 @@ export class AuthService {
       // create sales record
       const salesRecord = {
         userId: createAuth.userId,
-        storeId: `${user_name + Math.random().toString(36).slice(2)}`, // Generating unique storeId
         total_revenue: 0,
         wallet: {
           available_balance: 0,
