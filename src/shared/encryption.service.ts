@@ -32,7 +32,7 @@ export class EncryptionService {
     ).toString();
 
     if (!encrypt) {
-      return { message: "unabele to encrypt data" };
+      return { message: "unable to encrypt data" };
     } else {
       return encrypt;
     }
@@ -51,7 +51,7 @@ export class EncryptionService {
     ).toString(CryptoJS.enc.Utf8);
 
     if (!decrypt) {
-      return { message: "unabele to decrypt data" };
+      return { message: "unable to decrypt data" };
     } else {
       return decrypt;
     }

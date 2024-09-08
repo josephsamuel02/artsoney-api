@@ -146,9 +146,10 @@ export class AuthService {
 
   async login(loginUserDto: LoginUserDto) {
     try {
+      const { email } = loginUserDto;
       const userExist = await this.prisma.auth.findUnique({
         where: {
-          email: loginUserDto.email,
+          email: email,
         },
       });
 
@@ -157,6 +158,7 @@ export class AuthService {
           `No user found for email: ${loginUserDto.email}`,
         );
       }
+      // const encryptedPass = await this.encryptionService.comparePasswords(password);
 
       const isPasswordValid = this.encryptionService.comparePasswords(
         loginUserDto.password,

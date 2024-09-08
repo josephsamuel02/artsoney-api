@@ -5,7 +5,6 @@ import {
   ClassSerializerInterceptor,
   UseInterceptors,
   UseGuards,
-  Get,
 } from "@nestjs/common";
 import { AuthService } from "./auth.service";
 import { CreateUserDto } from "src/dtos/createUser.dto";
@@ -24,9 +23,10 @@ export class AuthController {
     return result;
   }
 
-  @Get("login")
+  @Post("login")
   public async login(@Body() loginUserDto: LoginUserDto): Promise<any> {
-    return await this.authService.login(loginUserDto);
+    const result = await this.authService.login(loginUserDto);
+    return result;
   }
 
   @UseGuards(JwtAuthGuard)

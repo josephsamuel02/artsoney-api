@@ -8,10 +8,11 @@ import {
 } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
-enum Artwork_type {
-  physical,
-  digital,
-}
+import { Artwork_type } from "@prisma/client";
+// enum Artwork_type {
+//   physical,
+//   digital,
+// }
 
 export class PostArtworkDto {
   @IsString()

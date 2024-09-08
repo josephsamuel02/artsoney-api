@@ -7,11 +7,12 @@ import {
   IsBoolean,
 } from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
+import { Artwork_type } from "@prisma/client";
 
-enum Artwork_type {
-  physical,
-  digital,
-}
+// enum Artwork_type {
+//   physical,
+//   digital,
+// }
 
 export class UpdateArtwork {
   @IsString()
