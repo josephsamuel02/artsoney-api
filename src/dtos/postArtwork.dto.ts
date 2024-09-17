@@ -63,6 +63,10 @@ export class PostArtworkDto {
 
   @ApiPropertyOptional()
   @IsOptional()
+  production_files?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
   copyright_license?: any;
 
   @ApiPropertyOptional()

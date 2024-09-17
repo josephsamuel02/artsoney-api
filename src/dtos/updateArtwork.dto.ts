@@ -75,6 +75,10 @@ export class UpdateArtwork {
 
   @ApiPropertyOptional()
   @IsOptional()
+  production_files?: string[];
+
+  @ApiPropertyOptional()
+  @IsOptional()
   @IsObject()
   co_owners?: co_owners[];
 

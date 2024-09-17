@@ -21,6 +21,7 @@ model artwork {
     images                             String[]
     thumbnail                          String?
     embed_code                         String[]
+    production_files                   String[]
     audio_video                        String[]
     animated_3d                        String[]
     certificate_of_authentication_type Certificate_of_authentication_type?
