@@ -6,7 +6,8 @@ require("dotenv").config();
 async function bootstrap() {
   const port = process.env.DEV_PORT || 8080;
   const app = await NestFactory.create(AppModule);
-
+  app.use(express.json({ limit: "50mb" }));
+  app.use(express.urlencoded({ limit: "50mb" }));
   app.enableCors();
   // app.enableCors({
   //   origin: [
