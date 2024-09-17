@@ -1,13 +1,14 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { SwaggerModule, DocumentBuilder } from "@nestjs/swagger";
+import { urlencoded, json } from "express";
 require("dotenv").config();
 
 async function bootstrap() {
   const port = process.env.DEV_PORT || 8080;
   const app = await NestFactory.create(AppModule);
-  app.use(json({ limit: '50mb' }));
-  app.use(urlencoded({ extended: true, limit: '50mb' }))
+  app.use(json({ limit: "50mb" }));
+  app.use(urlencoded({ extended: true, limit: "50mb" }));
   app.enableCors();
   // app.enableCors({
   //   origin: [
