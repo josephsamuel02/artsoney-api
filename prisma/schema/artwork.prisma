@@ -21,7 +21,6 @@ model artwork {
     images                             String[]
     thumbnail                          String?
     embed_code                         String[]
-    production_files                   String[]
     audio_video                        String[]
     animated_3d                        String[]
     certificate_of_authentication_type Certificate_of_authentication_type?
@@ -38,6 +37,8 @@ model artwork {
 
     for_sale Boolean?
     draft    Boolean  @default(false)
+
+    production_files String[]
 
     Store Store @relation(fields: [id], references: [id])
 
