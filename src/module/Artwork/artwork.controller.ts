@@ -25,6 +25,11 @@ export class ArtworkController {
     return await this.artworkService.getArtOfTheWeek();
   }
 
+  @Get("top_art")
+  public async getTopArt(): Promise<any> {
+    return await this.artworkService.getTopArt();
+  }
+
   @Get("artwork_interests")
   public async getArtworksByUserInterests(userId: any): Promise<any> {
     return await this.artworkService.getArtworksByUserInterests(userId);
@@ -35,7 +40,9 @@ export class ArtworkController {
     return await this.artworkService.searchArtworks(searchString);
   }
 
-  @Get("user_following_artwork")
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Get("artwork_by_following")
   public async getArtworksFromFollowedUsers(userId: string): Promise<any> {
     return await this.artworkService.getArtworksFromFollowedUsers(userId);
   }

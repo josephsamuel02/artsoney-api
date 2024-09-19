@@ -54,6 +54,47 @@ export class ArtworkService {
     }
   }
 
+  public async getTopArt(): Promise<any> {
+    try {
+      const thirtyDaysAgo = new Date();
+      thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
+
+      const ArtOfTheWeek = await this.prisma.artwork.findMany({
+        where: {
+          createdAt: {
+            gte: thirtyDaysAgo, // Get artworks created in the last 30 days
+          },
+        },
+        orderBy: [
+          { views: "desc" },
+          { likes: "desc" },
+          {
+            comments: {
+              _count: "desc", // Order by the number of comments
+            },
+          },
+        ],
+        take: 10, // Limit to 10 artworks, adjust if needed
+      });
+
+      if (!ArtOfTheWeek.length) {
+        throw new BadRequestException({
+          message: "No top artworks found in the last 30 days",
+        });
+      }
+
+      return {
+        status: 200,
+        message: "Art of the week fetched successfully",
+        data: ArtOfTheWeek,
+      };
+    } catch (error) {
+      throw new BadRequestException({
+        error: error.message,
+      });
+    }
+  }
+
   public async getArtworksByUserInterests(userId: string): Promise<any> {
     try {
       // Fetch the user's interests
