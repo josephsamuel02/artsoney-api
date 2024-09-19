@@ -20,6 +20,26 @@ import { ApiTags } from "@nestjs/swagger";
 export class ArtworkController {
   constructor(private readonly artworkService: ArtworkService) {}
 
+  @Get("art_of_the_week")
+  public async getArtOfTheWeek(): Promise<any> {
+    return await this.artworkService.getArtOfTheWeek();
+  }
+
+  @Get("artwork_interests")
+  public async getArtworksByUserInterests(userId: any): Promise<any> {
+    return await this.artworkService.getArtworksByUserInterests(userId);
+  }
+
+  @Get("search")
+  public async searchArtworks(searchString: string): Promise<any> {
+    return await this.artworkService.searchArtworks(searchString);
+  }
+
+  @Get("user_following_artwork")
+  public async getArtworksFromFollowedUsers(userId: string): Promise<any> {
+    return await this.artworkService.getArtworksFromFollowedUsers(userId);
+  }
+
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Post()

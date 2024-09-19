@@ -21,8 +21,8 @@ export class PostArtworkDto {
   userId: string;
 
   @IsString()
-  @ApiProperty()
-  @IsNotEmpty()
+  @ApiPropertyOptional()
+  @IsOptional()
   storeId: string;
 
   @IsString()

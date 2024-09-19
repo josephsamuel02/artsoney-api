@@ -2,7 +2,7 @@ model artwork {
     id         String  @id @default(auto()) @map("_id") @db.ObjectId
     artwork_id String  @unique
     userId     String
-    storeId    String? @unique
+    storeId    String?
 
     artwork_name      String
     tags              String[]

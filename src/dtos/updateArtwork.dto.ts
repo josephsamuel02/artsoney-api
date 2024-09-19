@@ -26,9 +26,9 @@ export class UpdateArtwork {
   artwork_id: string;
 
   @IsString()
-  @ApiProperty()
-  @IsNotEmpty()
-  storeId?: string;
+  @ApiPropertyOptional()
+  @IsOptional()
+  storeId: string;
 
   @IsString()
   @ApiPropertyOptional()
