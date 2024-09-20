@@ -8,6 +8,7 @@ import {
   Put,
   Get,
   Delete,
+  Param,
 } from "@nestjs/common";
 import { JwtAuthGuard } from "src/validation/jwt-auth.guard";
 import { ArtworkService } from "./artwork.service";
@@ -20,6 +21,23 @@ import { ApiTags } from "@nestjs/swagger";
 export class ArtworkController {
   constructor(private readonly artworkService: ArtworkService) {}
 
+  @Get()
+  public async getArts(): Promise<any> {
+    return await this.artworkService.getArts();
+  }
+
+  @Get("get_my_artworks/:userId")
+  public async getMyArtworks(@Param("userId") userId: string): Promise<any> {
+    return await this.artworkService.getMyArtworks(userId);
+  }
+
+  @Get("get_my_shop_artworks/:userId")
+  public async getMyShopArtworks(
+    @Param("userId") userId: string,
+  ): Promise<any> {
+    return await this.artworkService.getMyShopArtworks(userId);
+  }
+
   @Get("art_of_the_week")
   public async getArtOfTheWeek(): Promise<any> {
     return await this.artworkService.getArtOfTheWeek();
@@ -30,21 +48,45 @@ export class ArtworkController {
     return await this.artworkService.getTopArt();
   }
 
-  @Get("artwork_interests")
-  public async getArtworksByUserInterests(userId: any): Promise<any> {
+  @Get("top_shops_artworks")
+  public async TopShopsArtworks(): Promise<any> {
+    return await this.artworkService.TopShopsArtworks();
+  }
+
+  @Get("newbies_artwork")
+  public async getArtworkByNewbies(): Promise<any> {
+    return await this.artworkService.getArtworkByNewbies();
+  }
+
+  @Get("artwork_interests/:userId")
+  public async getArtworksByUserInterests(
+    @Param("userId") userId: string,
+  ): Promise<any> {
     return await this.artworkService.getArtworksByUserInterests(userId);
   }
 
-  @Get("search")
-  public async searchArtworks(searchString: string): Promise<any> {
-    return await this.artworkService.searchArtworks(searchString);
+  @Post("art_field")
+  public async getArtworksByArtField(@Body() artField: any): Promise<any> {
+    return await this.artworkService.getArtworksByArtField(artField);
   }
 
-  @UseGuards(JwtAuthGuard)
-  @UseInterceptors(ClassSerializerInterceptor)
-  @Get("artwork_by_following")
-  public async getArtworksFromFollowedUsers(userId: string): Promise<any> {
-    return await this.artworkService.getArtworksFromFollowedUsers(userId);
+  @Get("artwork_by_following/:userId")
+  public async getOneArtworksFromFollowedUsers(
+    @Param("userId") userId: string,
+  ): Promise<any> {
+    return await this.artworkService.getOneArtworksFromFollowedUsers(userId);
+  }
+
+  @Get("all_artworks_by_following/:userId")
+  public async getAllArtworksFromFollowedUsers(
+    @Param("userId") userId: string,
+  ): Promise<any> {
+    return await this.artworkService.getAllArtworksFromFollowedUsers(userId);
+  }
+
+  @Post("search")
+  public async searchArtworks(@Body() data: any): Promise<any> {
+    return await this.artworkService.searchArtworks(data);
   }
 
   @UseGuards(JwtAuthGuard)

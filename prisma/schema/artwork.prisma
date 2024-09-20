@@ -41,6 +41,7 @@ model artwork {
     production_files String[]
 
     Store Store @relation(fields: [id], references: [id])
+    user  User  @relation(fields: [userId], references: [userId]) // Define relation here
 
     createdAt DateTime? @default(now())
     updatedAt DateTime? @updatedAt

@@ -39,6 +39,8 @@ model User {
 
     Store Store?
 
+    artworks artwork[] // Relation to Artwork
+
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
 }

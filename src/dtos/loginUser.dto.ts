@@ -14,6 +14,11 @@ export class LoginUserDto {
 }
 
 export class UpdatePasswordDto {
+  @IsString()
+  @ApiProperty()
+  @IsNotEmpty()
+  email: string;
+
   @ApiProperty()
   @IsNotEmpty()
   new_password: string;
