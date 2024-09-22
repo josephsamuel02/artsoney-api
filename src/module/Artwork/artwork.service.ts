@@ -21,7 +21,8 @@ export class ArtworkService {
 
   public async getArts(): Promise<any> {
     try {
-      const ArtOfTheWeek = await this.prisma.artwork.findMany({
+      const getArts = await this.prisma.artwork.findMany({
+        take: 25,
         include: {
           user: {
             select: {
@@ -32,7 +33,7 @@ export class ArtworkService {
         },
       });
 
-      if (ArtOfTheWeek.length === 0) {
+      if (getArts.length === 0) {
         return {
           data: [],
           message: "No artworks",
@@ -42,7 +43,7 @@ export class ArtworkService {
       return {
         status: 200,
         message: "Artworks fetched successfully",
-        data: ArtOfTheWeek,
+        data: getArts,
       };
     } catch (error) {
       console.error("Error fetching Artworks  ", error); // Log the error for debugging
@@ -106,18 +107,18 @@ export class ArtworkService {
       const ArtOfTheWeek = await this.prisma.artwork.findMany({
         where: {
           createdAt: {
-            gte: sevenDaysAgo, // Get artworks created in the last 7 days
+            gte: sevenDaysAgo,
           },
         },
         orderBy: {
-          likes: "desc", // Order by likes in descending order
+          likes: "desc",
         },
-        take: 10, // Limit to 10 artworks
+        take: 10,
         include: {
           user: {
             select: {
               user_name: true,
-              profile_img: true, // Include user information
+              profile_img: true,
             },
           },
         },
@@ -165,6 +166,14 @@ export class ArtworkService {
           },
         ],
         take: 10, // Limit to 10 artworks, adjust if needed
+        include: {
+          user: {
+            select: {
+              user_name: true,
+              profile_img: true, // Include user information
+            },
+          },
+        },
       });
 
       if (!ArtOfTheWeek.length) {
@@ -179,6 +188,52 @@ export class ArtworkService {
         data: ArtOfTheWeek,
       };
     } catch (error) {
+      throw new BadRequestException({
+        error: error.message,
+      });
+    }
+  }
+
+  public async getTrendingArtworks(): Promise<any> {
+    try {
+      const threeDays = new Date();
+      threeDays.setDate(threeDays.getDate() - 3);
+
+      const ArtOfTheWeek = await this.prisma.artwork.findMany({
+        where: {
+          createdAt: {
+            gte: threeDays, // Get artworks created in the last 7 days
+          },
+        },
+        orderBy: {
+          likes: "desc", // Order by likes in descending order
+        },
+        take: 10, // Limit to 10 artworks
+        include: {
+          user: {
+            select: {
+              user_name: true,
+              profile_img: true, // Include user information
+            },
+          },
+        },
+      });
+
+      if (!ArtOfTheWeek.length) {
+        return {
+          data: [],
+          message: "No top artworks found in the last 7 days",
+        };
+      }
+
+      return {
+        status: 200,
+        message: "Art of the week fetched successfully",
+        data: ArtOfTheWeek,
+      };
+    } catch (error) {
+      console.error("Error fetching Art of the Week:", error); // Log the error for debugging
+
       throw new BadRequestException({
         error: error.message,
       });
@@ -209,10 +264,9 @@ export class ArtworkService {
         take: 15,
         include: {
           user: {
-            // Include the related user data
             select: {
-              user_name: true, // Get user_name from User model
-              profile_img: true, // Get profile_img from User model
+              user_name: true,
+              profile_img: true,
             },
           },
         },
@@ -380,6 +434,14 @@ export class ArtworkService {
           },
         },
         take: 12,
+        include: {
+          user: {
+            select: {
+              user_name: true,
+              profile_img: true, // Include user information
+            },
+          },
+        },
       });
 
       return {
@@ -553,6 +615,16 @@ export class ArtworkService {
         },
         orderBy: {
           createdAt: "desc", // Optionally order by creation date
+        },
+        take: 14,
+        include: {
+          user: {
+            select: {
+              userId: true,
+              user_name: true,
+              profile_img: true, // Include user information with artworks
+            },
+          },
         },
       });
 

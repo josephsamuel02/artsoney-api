@@ -43,6 +43,11 @@ export class ArtworkController {
     return await this.artworkService.getArtOfTheWeek();
   }
 
+  @Get("trending_artwork")
+  public async getTrendingArtworks(): Promise<any> {
+    return await this.artworkService.getTrendingArtworks();
+  }
+
   @Get("top_art")
   public async getTopArt(): Promise<any> {
     return await this.artworkService.getTopArt();
