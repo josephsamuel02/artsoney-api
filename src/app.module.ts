@@ -10,6 +10,7 @@ import { TransactionsModule } from "./module/transactions/transactions.module";
 import { MongoDBModule } from "./mongodb/mongodb.module";
 import { ReviewsModule } from "./module/reviews/reviews.module";
 import { ChatModule } from "./module/chat/chat.module";
+import { ShopModule } from "./module/ArtworkShop/shop.module";
 
 @Module({
   imports: [
@@ -18,6 +19,7 @@ import { ChatModule } from "./module/chat/chat.module";
     UserModule,
     AuthModule,
     ArtworkModule,
+    ShopModule,
     CartModule,
     OrderModule,
     SalesModule,
