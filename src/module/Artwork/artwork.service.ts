@@ -596,6 +596,7 @@ export class ArtworkService {
           message: "Invalid search string",
         };
       }
+      const searchString = data.search_string.toLowerCase();
 
       // Fetch artworks that match the search string in artwork_name or tags
       const artworks = await this.prisma.artwork.findMany({
@@ -603,18 +604,18 @@ export class ArtworkService {
           OR: [
             {
               artwork_name: {
-                contains: data.search_string,
+                contains: searchString,
                 mode: "insensitive", // Case-insensitive partial match for artwork_name
               },
             },
             {
               tags: {
-                hasSome: [data.search_string], // Partial match for any tag
+                hasSome: [searchString], // Partial match for any tag
               },
             },
             {
               art_field: {
-                hasSome: [data.search_string], // Partial match for any art field
+                hasSome: [searchString], // Partial match for any art field
               },
             },
           ],
