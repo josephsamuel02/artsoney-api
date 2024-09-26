@@ -12,6 +12,52 @@ export class ShopService {
     return data;
   }
 
+  public async ShopsArtworks(): Promise<any> {
+    // Adjusted to 20 days as per your code
+
+    try {
+      const ShopsArtworks = await this.prisma.artwork.findMany({
+        where: {
+          for_sale: true,
+        },
+        orderBy: [
+          { views: "desc" },
+          { likes: "desc" },
+          {
+            comments: {
+              _count: "desc",
+            },
+          },
+        ],
+        take: 15,
+        include: {
+          user: {
+            select: {
+              user_name: true,
+              profile_img: true,
+            },
+          },
+        },
+      });
+
+      if (!ShopsArtworks.length) {
+        throw new BadRequestException({
+          message: "No artworks found in the last 20 days",
+        });
+      }
+
+      return {
+        status: 200,
+        message: "Shops artworks fetched successfully",
+        data: ShopsArtworks,
+      };
+    } catch (error) {
+      throw new BadRequestException({
+        error: error.message,
+      });
+    }
+  }
+
   public async TopShopsArtworks(): Promise<any> {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 20); // Adjusted to 20 days as per your code

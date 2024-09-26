@@ -8,6 +8,11 @@ import { ShopService } from "./shop.service";
 export class ShopController {
   constructor(private readonly shopService: ShopService) {}
 
+  @Get("shop_artworks")
+  public async ShopsArtworks(): Promise<any> {
+    return await this.shopService.ShopsArtworks();
+  }
+
   @Get("top_shop_artworks")
   public async TopShopsArtworks(): Promise<any> {
     return await this.shopService.TopShopsArtworks();
