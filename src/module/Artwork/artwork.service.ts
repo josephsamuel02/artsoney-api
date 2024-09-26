@@ -433,12 +433,13 @@ export class ArtworkService {
             has: artField.art_field,
           },
         },
-        take: 12,
+        take: 14,
         include: {
           user: {
             select: {
+              userId: true,
               user_name: true,
-              profile_img: true, // Include user information
+              profile_img: true, // Include user information with artworks
             },
           },
         },
@@ -603,18 +604,23 @@ export class ArtworkService {
             {
               artwork_name: {
                 contains: data.search_string,
-                mode: "insensitive", // Case insensitive search
+                mode: "insensitive", // Case-insensitive partial match for artwork_name
               },
             },
             {
               tags: {
-                has: data.search_string, // Exact match for a tag
+                hasSome: [data.search_string], // Partial match for any tag
+              },
+            },
+            {
+              art_field: {
+                hasSome: [data.search_string], // Partial match for any art field
               },
             },
           ],
         },
         orderBy: {
-          createdAt: "desc", // Optionally order by creation date
+          createdAt: "desc", // Order by creation date
         },
         take: 14,
         include: {
