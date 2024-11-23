@@ -30,6 +30,7 @@ interface Socials {
   patreon?: string;
   linkedin?: string;
 }
+
 interface Address {
   country: string;
   street: string;
