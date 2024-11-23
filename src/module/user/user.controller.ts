@@ -90,6 +90,13 @@ export class UserController {
     return this.userService.updateAccountSettings(accountSettingsDto);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @UseInterceptors(ClassSerializerInterceptor)
+  @Put("follow")
+  followUser(@Body() updateUserDto: UpdateUserDto) {
+    return this.userService.addFollowUser(updateUserDto);
+  }
+
   // @UseGuards(JwtAuthGuard)
   // @UseInterceptors(ClassSerializerInterceptor)
   // @Put("suspend_user")

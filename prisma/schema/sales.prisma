@@ -1,7 +1,7 @@
 model sales {
     id               String            @id @default(auto()) @map("_id") @db.ObjectId
     userId           String            @unique
-    storeId          String?           @unique
+    storeId          String?
     total_revenue    Int?
     wallet           Wallet?
     sales            Int

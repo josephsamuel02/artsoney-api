@@ -23,6 +23,12 @@ export class AuthController {
     return result;
   }
 
+  @Post("seed_users")
+  public async seedUsers(@Body() body: any[]) {
+    const result = this.authService.seedUsers(body);
+    return result;
+  }
+
   @Post("login")
   public async login(@Body() loginUserDto: LoginUserDto): Promise<any> {
     const result = await this.authService.login(loginUserDto);

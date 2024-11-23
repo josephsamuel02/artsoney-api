@@ -111,7 +111,7 @@ export class ArtworkService {
           },
         },
         orderBy: {
-          likes: "desc",
+          likesCount: "desc", // Sort by the precomputed count
         },
         take: 10,
         include: {
@@ -158,7 +158,7 @@ export class ArtworkService {
         },
         orderBy: [
           { views: "desc" },
-          { likes: "desc" },
+          { likesCount: "desc" },
           {
             comments: {
               _count: "desc", // Order by the number of comments
@@ -206,7 +206,7 @@ export class ArtworkService {
           },
         },
         orderBy: {
-          likes: "desc", // Order by likes in descending order
+          likesCount: "desc", // Order by likes in descending order
         },
         take: 10, // Limit to 10 artworks
         include: {
@@ -254,7 +254,7 @@ export class ArtworkService {
         },
         orderBy: [
           { views: "desc" },
-          { likes: "desc" },
+          { likesCount: "desc" },
           {
             comments: {
               _count: "desc",
@@ -334,10 +334,35 @@ export class ArtworkService {
       );
 
       const selectedArtworks = artworks.filter(Boolean); // Return only artworks (excluding nulls if any user has no artwork)
+
+      // If no artworks found, fetch the latest artworks
       if (!selectedArtworks.length) {
-        throw new BadRequestException({
-          message: "No artworks found in the last 30 days",
+        const latestArtworks = await this.prisma.artwork.findMany({
+          orderBy: {
+            createdAt: "desc", // Sort by newest first
+          },
+          take: 10, // Limit to 10 artworks
+          include: {
+            user: {
+              select: {
+                user_name: true,
+                profile_img: true,
+              },
+            },
+          },
         });
+
+        if (!latestArtworks.length) {
+          throw new BadRequestException({
+            message: "No artworks available",
+          });
+        }
+
+        return {
+          status: 200,
+          message: "No newbie artworks found. Latest artworks fetched instead.",
+          data: latestArtworks,
+        };
       }
 
       return {
@@ -657,10 +682,23 @@ export class ArtworkService {
   public async uploadArtwork(postArtworkDto: PostArtworkDto): Promise<any> {
     try {
       // Create user information
+      const artwork_id = `${Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)}`;
+
       const artworkData = {
-        artwork_id: `${Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)}`,
-        ...postArtworkDto,
+        artwork_id: artwork_id,
+        artwork_name: postArtworkDto.artwork_name,
+        artwork_type: postArtworkDto.artwork_type,
+        tags: postArtworkDto.tags,
+        tools: postArtworkDto.tools,
+        description: postArtworkDto.description,
+        art_field: postArtworkDto.art_field,
+        user: {
+          connect: { userId: postArtworkDto.userId }, // Relational input
+        },
+        storeId: postArtworkDto.storeId, // If nullable, ensure it's handled
+        // Add any other fields here
       };
+
       const newArtwork = await this.prisma.artwork.create({
         data: artworkData,
       });
@@ -684,29 +722,73 @@ export class ArtworkService {
     }
   }
 
+  public async seedDatabase(data: any[]): Promise<any> {
+    try {
+      // Check if the incoming data is an array
+      if (!Array.isArray(data)) {
+        throw new BadRequestException({ message: "Data must be an array" });
+      }
+
+      const artworks = [];
+
+      // Loop through the data array and insert each artwork
+      for (const artworkData of data) {
+        const artwork = {
+          artwork_id: `${Math.random().toString(36).slice(2) + Math.random().toString(36).slice(2)}`,
+          ...artworkData, // Spread the artwork data into the database object
+        };
+
+        // Create artwork in the database
+        const newArtwork = await this.prisma.artwork.create({
+          data: artwork,
+        });
+
+        // Push the successfully created artwork to the array
+        artworks.push(newArtwork);
+      }
+
+      // Return response with all seeded artworks
+      return {
+        status: 200,
+        message: `${artworks.length} artworks seeded successfully`,
+        artworks: artworks, // Return the list of created artworks
+      };
+    } catch (error) {
+      // Error handling
+      throw new BadRequestException({
+        error: error.message,
+      });
+    }
+  }
+
   public async updateArtwork(updateArtwork: UpdateArtwork): Promise<any> {
     try {
-      const newArtwork = await this.prisma.artwork.update({
-        where: { artwork_id: updateArtwork.artwork_id },
-        data: updateArtwork,
-      });
+      const { userId, artwork_id, storeId, ...others } = updateArtwork;
 
-      if (!newArtwork) {
-        throw new BadRequestException({
-          message: "Unable to upload artwork",
-        });
-      }
+      const artworkData: any = {
+        ...others,
+        storeId: storeId || undefined, // Handle storeId as nullable, use undefined if null
+        user: {
+          connect: { userId },
+        },
+      };
+
+      // Perform the update operation
+      const updatedArtwork = await this.prisma.artwork.update({
+        where: { artwork_id },
+        data: artworkData,
+      });
 
       return {
         status: 200,
         message: "Artwork updated successfully",
-        artwork_name: newArtwork.artwork_name,
-        artwork_id: newArtwork.artwork_id,
-        user: newArtwork.userId,
+        artwork_name: updatedArtwork.artwork_name,
+        artwork_id: updatedArtwork.artwork_id,
+        user: updatedArtwork.userId, // Assuming the `userId` is also returned in the response
       };
     } catch (error) {
       throw new BadRequestException({
-        error: error.message,
+        error: error.message || "An error occurred while updating artwork",
       });
     }
   }
@@ -714,34 +796,31 @@ export class ArtworkService {
   //update views
   public async updateViews(updateArtwork: UpdateArtwork): Promise<any> {
     try {
-      const artwork = await this.prisma.artwork.findUnique({
-        where: { artwork_id: updateArtwork.artwork_id },
-      });
-
-      const updateViews = await this.prisma.artwork.update({
+      // Increment the views field
+      const art = await this.prisma.artwork.update({
         where: {
-          artwork_id: updateArtwork.artwork_id, // Specify the document to update
+          artwork_id: updateArtwork.artwork_id,
         },
         data: {
-          views: artwork.views + 1,
+          views: { increment: 1 },
         },
       });
 
-      if (!updateViews) {
+      if (!art) {
         throw new BadRequestException({
-          message: "Unable to like artwork",
+          message: "unable to update views",
         });
       }
 
       return {
         status: 200,
-        message: "Artwork viewed",
-        artwork_id: artwork.artwork_id,
-        user: updateArtwork.userId,
+        message: "Artwork view count updated",
+        artwork_id: updateArtwork.artwork_id,
       };
     } catch (error) {
       throw new BadRequestException({
-        error: error.message,
+        message:
+          error.message || "An error occurred while updating artwork views",
       });
     }
   }
@@ -749,34 +828,53 @@ export class ArtworkService {
   // update  likes
   public async updateLikes(updateArtwork: UpdateArtwork): Promise<any> {
     try {
+      // Fetch the artwork with its current likes
       const artwork = await this.prisma.artwork.findUnique({
         where: { artwork_id: updateArtwork.artwork_id },
+        select: { likes: true, likesCount: true },
       });
 
-      const updateLikes = await this.prisma.artwork.update({
-        where: {
-          artwork_id: updateArtwork.artwork_id, // Specify the document to update
-        },
-        data: {
-          likes: artwork.likes + updateArtwork.likes,
-        },
-      });
-
-      if (!updateLikes) {
-        throw new BadRequestException({
-          message: "Unable to like artwork",
-        });
+      if (!artwork) {
+        throw new BadRequestException({ message: "Artwork not found" });
       }
+
+      // Determine if the user is liking or un-liking
+      const isLiked = artwork.likes?.some(
+        (like) => like.userId === updateArtwork.userId,
+      );
+
+      const updatedLikes = isLiked
+        ? artwork.likes.filter((like) => like.userId !== updateArtwork.userId) // Remove the user from likes
+        : [
+            ...(artwork.likes || []),
+            {
+              userId: updateArtwork.userId,
+              user_name: updateArtwork.user_name,
+            },
+          ]; // Add the user to likes
+
+      // Calculate the new likesCount
+      const newLikesCount = isLiked
+        ? Math.max(artwork.likesCount - 1, 0) // Ensure it doesn't go below 0
+        : artwork.likesCount + 1;
+
+      // Update the artwork with the new likes array and likesCount
+      await this.prisma.artwork.update({
+        where: { artwork_id: updateArtwork.artwork_id },
+        data: {
+          likes: updatedLikes,
+          likesCount: newLikesCount,
+        },
+      });
 
       return {
         status: 200,
-        message: "Artwork liked",
-        artwork_id: artwork.artwork_id,
-        user: updateArtwork.userId,
+        message: isLiked ? "Like removed" : "Artwork liked",
+        likesCount: newLikesCount,
       };
     } catch (error) {
       throw new BadRequestException({
-        error: error.message,
+        message: error.message || "An error occurred while updating likes",
       });
     }
   }
@@ -790,7 +888,6 @@ export class ArtworkService {
 
       const updateComments = await this.prisma.artwork.update({
         where: { artwork_id: updateArtwork.artwork_id },
-
         data: {
           comments: {
             push: {
@@ -813,8 +910,7 @@ export class ArtworkService {
       return {
         status: 200,
         message: "Commented on Artwork successfully",
-        artwork_id: artwork.artwork_id,
-        user: updateArtwork.userId,
+        data: { artwork_id: artwork.artwork_id, userId: updateArtwork.userId },
       };
     } catch (error) {
       throw new BadRequestException({

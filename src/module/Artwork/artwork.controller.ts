@@ -21,6 +21,11 @@ import { ApiTags } from "@nestjs/swagger";
 export class ArtworkController {
   constructor(private readonly artworkService: ArtworkService) {}
 
+  @Post("seed")
+  public async seedDatabase(@Body() data: any[]): Promise<any> {
+    return await this.artworkService.seedDatabase(data);
+  }
+
   @Get()
   public async getArts(): Promise<any> {
     return await this.artworkService.getArts();
@@ -122,14 +127,14 @@ export class ArtworkController {
   }
 
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get("view")
+  @Post("view")
   public async updateViews(@Body() updateArtwork: UpdateArtwork): Promise<any> {
     return await this.artworkService.updateViews(updateArtwork);
   }
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get("like")
+  @Post("like")
   public async updateLikes(@Body() updateArtwork: UpdateArtwork): Promise<any> {
     return await this.artworkService.updateLikes(updateArtwork);
   }

@@ -22,7 +22,7 @@ export class ShopService {
         },
         orderBy: [
           { views: "desc" },
-          { likes: "desc" },
+          { likesCount: "desc" },
           {
             comments: {
               _count: "desc",
@@ -72,7 +72,7 @@ export class ShopService {
         },
         orderBy: [
           { views: "desc" },
-          { likes: "desc" },
+          { likesCount: "desc" },
           {
             comments: {
               _count: "desc",

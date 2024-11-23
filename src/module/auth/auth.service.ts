@@ -144,6 +144,131 @@ export class AuthService {
     }
   }
 
+  public async seedUsers(data: any[]): Promise<any> {
+    try {
+      const usersCreated = [];
+
+      // Loop through each user data and create the user record
+      for (const userData of data) {
+        // // Check if user already exists
+        // const userExist = await this.prisma.auth.findFirst({
+        //   where: {
+        //     email: userData.email,
+        //   },
+        // });
+
+        // if (userExist) {
+        //   throw new BadRequestException({
+        //     message: `User with email ${userData.email} already exists`,
+        //   });
+        // }
+
+        const { userId, user_name, email, password } = userData;
+
+        // Create auth record for the user
+        const createAuth = await this.prisma.auth.create({
+          data: {
+            userId: userId, // Use the userId provided by the user
+            user_name: user_name,
+            email: email,
+            password: password, // Keep the password as is (no encryption)
+          },
+        });
+
+        if (!createAuth) {
+          throw new BadRequestException({
+            message: `Unable to create user auth account for ${user_name}`,
+          });
+        }
+
+        // Create user profile information
+        const userInfo = {
+          userId: createAuth.userId,
+          email: email,
+          user_name: user_name,
+          phone_number: userData.phone_number,
+          first_name: userData.first_name,
+          last_name: userData.last_name,
+          middle_name: userData.middle_name,
+          date_of_birth: userData.date_of_birth,
+          address: userData.address,
+          profile_img: userData.profile_img,
+          profile_poster_img: userData.profile_poster_img,
+          about: userData.about,
+          art_focus: userData.art_focus,
+          bio: userData.bio,
+          country: userData.country,
+          state: userData.state,
+          time_zone: userData.time_zone,
+          language: userData.language,
+          profession: userData.profession,
+          interests: userData.interests,
+          hubby: userData.hubby,
+          following: userData.following,
+          followers: userData.followers,
+          likes: userData.likes,
+        };
+
+        const newUser = await this.prisma.user.create({ data: userInfo });
+
+        if (!newUser) {
+          throw new BadRequestException({
+            message: `Unable to create user profile for ${user_name}`,
+          });
+        }
+
+        // Create user account information (settings)
+        const userAccount = {
+          userId: createAuth.userId,
+          email: email,
+        };
+
+        const account = await this.prisma.accountSettings.create({
+          data: userAccount,
+        });
+
+        if (!account) {
+          throw new BadRequestException({
+            message: `Unable to create user account settings for ${user_name}`,
+          });
+        }
+
+        // Create sales record
+        const salesRecord = {
+          userId: createAuth.userId,
+          total_revenue: 0,
+          wallet: {
+            available_balance: 0,
+            pending_balance: 0,
+          },
+          sales: 0,
+        };
+
+        const sales = await this.prisma.sales.create({
+          data: salesRecord,
+        });
+
+        if (!sales) {
+          throw new BadRequestException({
+            message: `Unable to create sales record for ${user_name}`,
+          });
+        }
+
+        usersCreated.push(newUser);
+      }
+
+      return {
+        status: 200,
+        message: `${usersCreated.length} Artsony account(s) created successfully`,
+        data: usersCreated,
+      };
+    } catch (error) {
+      throw new BadRequestException({
+        error: error.message,
+      });
+    }
+  }
+
   async login(loginUserDto: LoginUserDto) {
     try {
       const { email } = loginUserDto;

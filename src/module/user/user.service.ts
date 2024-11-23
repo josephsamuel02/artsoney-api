@@ -149,6 +149,50 @@ export class UserService {
     }
   }
 
+  async addFollowUser(updateUserDto: UpdateUserDto) {
+    try {
+      // Ensure the user exists
+      const user = await this.prisma.user.findFirst({
+        where: {
+          userId: updateUserDto.userId,
+        },
+      });
+
+      if (!user) {
+        throw new NotFoundException("User not found");
+      }
+
+      // Check if the user is already in the followers array
+      const isAlreadyFollowing = user.followers.some(
+        (follower) => follower.user_id === updateUserDto.user_id,
+      );
+
+      if (isAlreadyFollowing) {
+        return { status: "success", message: "User is already a follower" };
+      }
+
+      // Update the followers array
+      const updatedUser = await this.prisma.user.update({
+        where: { userId: updateUserDto.userId },
+        data: {
+          followers: {
+            push: {
+              user_name: updateUserDto.user_name,
+              user_id: updateUserDto.user_id,
+              profile_img: updateUserDto.profile_img,
+            },
+          },
+        },
+      });
+
+      return { status: 200, message: "success", data: updatedUser.userId };
+    } catch (error) {
+      throw new BadRequestException({
+        error: error.message,
+      });
+    }
+  }
+
   // Admin Endpoints
   async getAllUsers() {
     try {

@@ -17,7 +17,8 @@ interface Following {
 
 interface Followers {
   user_name: string;
-  userId: string;
+  user_id: string;
+  profile_img?: string;
 }
 
 interface Socials {
@@ -27,6 +28,7 @@ interface Socials {
   youtube?: string;
   tiktok?: string;
   patreon?: string;
+  linkedin?: string;
 }
 interface Address {
   country: string;
@@ -42,6 +44,11 @@ export class UpdateUserDto {
   @ApiProperty()
   @IsNotEmpty()
   userId: string;
+
+  @IsString()
+  @ApiPropertyOptional()
+  @IsOptional()
+  user_id?: string;
 
   @IsString()
   @ApiPropertyOptional()

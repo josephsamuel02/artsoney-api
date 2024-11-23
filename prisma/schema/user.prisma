@@ -51,6 +51,7 @@ type Socials {
     instagram String?
     youtube   String?
     tiktok    String?
+    linkedin  String?
     patreon   String?
 }
 
@@ -69,8 +70,9 @@ type following {
 }
 
 type followers {
-    user_name String
-    userId    String
+    user_name   String
+    user_id     String?
+    profile_img String?
 }
 
 model AccountSettings {
