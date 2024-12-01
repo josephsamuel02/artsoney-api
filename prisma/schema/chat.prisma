@@ -1,20 +1,24 @@
-type Content {
-    user_id   String?
-    text      String?
-    video     String?
-    url       String?
-    audio     String?
-    image     String?
-    gif       String?
-    svg       String?
-    createdAt DateTime @default(now())
+model Chat {
+  id       String    @id @default(auto()) @map("_id") @db.ObjectId
+  sender   String
+  receiver String?
+  content  Content[]
+
+  senderUser   User? @relation("SenderRelation", fields: [sender], references: [userId])
+  receiverUser User? @relation("ReceiverRelation", fields: [receiver], references: [userId])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
-model Chat {
-    id        String    @id @default(auto()) @map("_id") @db.ObjectId
-    sender    String
-    receiver  String?
-    content   Content[]
-    createdAt DateTime  @default(now())
-    updatedAt DateTime  @updatedAt
+type Content {
+  user_id   String?
+  text      String?
+  video     String?
+  url       String?
+  audio     String?
+  image     String?
+  gif       String?
+  svg       String?
+  createdAt DateTime @default(now())
 }

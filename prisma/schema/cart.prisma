@@ -1,19 +1,19 @@
 model Cart {
-    id          String         @id @default(auto()) @map("_id") @db.ObjectId
-    user_name   String?
-    userId      String         @unique
-    products    CartArtworks[]
-    total_price Int?
-    storeId     String?
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  user_name   String?
+  userId      String         @unique
+  products    CartArtworks[]
+  total_price Int?
+  storeId     String?
 }
 
 type CartArtworks {
-    userId        String?
-    storeId       String?
-    product_id    String?
-    product_image String[]
-    product_title String?
-    price         Int?
-    quantity      Int?
-    createdAt     DateTime @default(now())
+  userId        String?
+  storeId       String?
+  product_id    String?
+  product_image String[]
+  product_title String?
+  price         Int?
+  quantity      Int?
+  createdAt     DateTime @default(now())
 }

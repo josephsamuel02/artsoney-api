@@ -32,6 +32,13 @@ export class CreateChatMessageDto {
   })
   @IsNotEmpty()
   content?: Content[];
+
+  @ApiPropertyOptional({
+    description: "the text message",
+  })
+  @IsOptional()
+  @IsString()
+  text?: string;
 }
 
 export class GetChatMessageDto {
@@ -39,6 +46,11 @@ export class GetChatMessageDto {
   @IsOptional()
   @IsString()
   id?: string;
+
+  @ApiPropertyOptional()
+  @IsOptional()
+  @IsString()
+  userId?: string;
 
   @ApiPropertyOptional()
   @IsOptional()
@@ -63,4 +75,41 @@ export class GetChatMessageDto {
   @IsOptional()
   @IsNumber()
   limit?: number;
+}
+
+export class SendChatMessageDto {
+  @ApiProperty({
+    description: "id of the conversation",
+  })
+  @IsNotEmpty()
+  @IsString()
+  id: string;
+
+  @ApiProperty({
+    description: "id of message sender",
+  })
+  @IsNotEmpty()
+  @IsString()
+  user_id: string;
+
+  @ApiPropertyOptional({
+    description: "the text message",
+  })
+  @IsOptional()
+  @IsString()
+  text?: string;
+
+  @ApiPropertyOptional({
+    description: "any url/link",
+  })
+  @IsOptional()
+  @IsString()
+  url?: string;
+
+  @ApiPropertyOptional({
+    description: "image url",
+  })
+  @IsOptional()
+  @IsString()
+  image?: string;
 }

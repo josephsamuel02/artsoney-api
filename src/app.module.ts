@@ -11,6 +11,7 @@ import { MongoDBModule } from "./mongodb/mongodb.module";
 import { ReviewsModule } from "./module/reviews/reviews.module";
 import { ChatModule } from "./module/chat/chat.module";
 import { ShopModule } from "./module/ArtworkShop/shop.module";
+import { MessagesModule } from './messages/messages.module';
 
 @Module({
   imports: [
@@ -26,6 +27,7 @@ import { ShopModule } from "./module/ArtworkShop/shop.module";
     TransactionsModule,
     ReviewsModule,
     ChatModule,
+    MessagesModule,
   ],
 })
 export class AppModule {}

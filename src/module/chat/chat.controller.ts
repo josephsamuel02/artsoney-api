@@ -15,6 +15,7 @@ import { ApiTags } from "@nestjs/swagger";
 import {
   CreateChatMessageDto,
   GetChatMessageDto,
+  SendChatMessageDto,
 } from "src/dtos/chatMessage.dto";
 
 @ApiTags("chat")
@@ -35,9 +36,9 @@ export class ChatController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Put()
   public async sendMessage(
-    @Body() getChatMessageDto: GetChatMessageDto,
+    @Body() sendChatMessageDto: SendChatMessageDto,
   ): Promise<any> {
-    return this.chatService.sendMessage(getChatMessageDto);
+    return this.chatService.sendMessage(sendChatMessageDto);
   }
 
   @Get()
@@ -49,6 +50,6 @@ export class ChatController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(":userId")
   async getAllMessagesForUser(@Param("userId") userId: string) {
-    return this.chatService.getAllMessagesForUser(userId);
+    return this.chatService.getAllMessagesForUser({ userId: userId });
   }
 }

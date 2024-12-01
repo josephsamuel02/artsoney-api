@@ -1,93 +1,93 @@
 model artwork {
-    id         String  @id @default(auto()) @map("_id") @db.ObjectId
-    artwork_id String  @unique
-    userId     String
-    storeId    String?
+  id         String  @id @default(auto()) @map("_id") @db.ObjectId
+  artwork_id String  @unique
+  userId     String
+  storeId    String?
 
-    artwork_name      String
-    tags              String[]
-    tools             String[]
-    description       String?
-    art_field         String[]
-    visibility        String?     @default("everyone")
-    disable_comments  Boolean?    @default(false)
-    copyright_license String[]
-    co_owners         co_owners[]
-    designed_for      String[]
+  artwork_name      String
+  tags              String[]
+  tools             String[]
+  description       String?
+  art_field         String[]
+  visibility        String?     @default("everyone")
+  disable_comments  Boolean?    @default(false)
+  copyright_license String[]
+  co_owners         co_owners[]
+  designed_for      String[]
 
-    artwork_type                       Artwork_type
-    appreciation                       String[]
-    dimensions                         Dimensions?
-    images                             String[]
-    thumbnail                          String?
-    embed_code                         String[]
-    audio_video                        String[]
-    animated_3d                        String[]
-    certificate_of_authentication_type Certificate_of_authentication_type?
-    certificate_of_authentication      String[]
+  artwork_type                       Artwork_type
+  appreciation                       String[]
+  dimensions                         Dimensions?
+  images                             String[]
+  thumbnail                          String?
+  embed_code                         String[]
+  audio_video                        String[]
+  animated_3d                        String[]
+  certificate_of_authentication_type Certificate_of_authentication_type?
+  certificate_of_authentication      String[]
 
-    available_quantity Int?
-    currency           currency?
-    auction            Boolean?  @default(false)
-    price              Int?
+  available_quantity Int?
+  currency           currency?
+  auction            Boolean?  @default(false)
+  price              Int?
 
-    likes      Likes[]
-    likesCount Int        @default(0)
-    views      Int?
-    comments   comments[]
+  likes      Likes[]
+  likesCount Int        @default(0)
+  views      Int?
+  comments   comments[]
 
-    for_sale Boolean?
-    draft    Boolean  @default(false)
+  for_sale Boolean?
+  draft    Boolean  @default(false)
 
-    production_files String[]
+  production_files String[]
 
-    Store Store @relation(fields: [id], references: [id])
-    user  User  @relation(fields: [userId], references: [userId]) // Define relation here
+  Store Store @relation(fields: [id], references: [id])
+  user  User  @relation(fields: [userId], references: [userId]) // Define relation here
 
-    createdAt DateTime? @default(now())
-    updatedAt DateTime? @updatedAt
+  createdAt DateTime? @default(now())
+  updatedAt DateTime? @updatedAt
 }
 
 type co_owners {
-    profile_img String?
-    user_name   String
-    userId      String
+  profile_img String?
+  user_name   String
+  userId      String
 }
 
 type Likes {
-    // profile_img String?
-    userId    String
-    user_name String?
+  // profile_img String?
+  userId    String
+  user_name String?
 }
 
 type comments {
-    profile_img String?
-    userId      String
-    user_name   String?
-    comment     String?
-    likes       Int?
+  profile_img String?
+  userId      String
+  user_name   String?
+  comment     String?
+  likes       Int?
 }
 
 type Dimensions {
-    length  String
-    breadth String
-    height  String?
+  length  String
+  breadth String
+  height  String?
 }
 
 enum currency {
-    usd
-    ngn
-    euro
-    gbp
+  usd
+  ngn
+  euro
+  gbp
 }
 
 enum Certificate_of_authentication_type {
-    physical
-    digital
-    hybrid
+  physical
+  digital
+  hybrid
 }
 
 enum Artwork_type {
-    physical
-    digital
+  physical
+  digital
 }
