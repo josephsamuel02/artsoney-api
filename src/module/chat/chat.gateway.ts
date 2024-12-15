@@ -12,8 +12,6 @@ import {
   GetChatMessageDto,
   SendChatMessageDto,
 } from "src/dtos/chatMessage.dto";
-import { UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
-import { JwtAuthGuard } from "src/validation/jwt-auth.guard";
 
 @WebSocketGateway({
   cors: {
@@ -65,8 +63,8 @@ export class ChatGateway {
     console.log(`Client disconnected: ${client.id}`);
   }
 
-  @UsePipes(new ValidationPipe())
-  @UseGuards(JwtAuthGuard)
+  // @UsePipes(new ValidationPipe())
+  // @UseGuards(JwtAuthGuard)
   @SubscribeMessage("create_message")
   async createConversation(
     @MessageBody() createChatMessageDto: CreateChatMessageDto,
