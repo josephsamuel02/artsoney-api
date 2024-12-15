@@ -4,8 +4,6 @@ import {
   ClassSerializerInterceptor,
   UseInterceptors,
   UseGuards,
-  Get,
-  Delete,
   Put,
   Post,
 } from "@nestjs/common";
@@ -22,7 +20,7 @@ export class CartController {
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  @Get()
+  @Post("my_cart")
   public async getCartItems(@Body() cartDto: CartDto): Promise<any> {
     return await this.cartService.getCartItems(cartDto);
   }
@@ -30,7 +28,7 @@ export class CartController {
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
   @Post("add")
-  public async updateCart(@Body() cartDto: CartDto): Promise<any> {
+  public async addToCart(@Body() cartDto: CartDto): Promise<any> {
     return await this.cartService.addToCart(cartDto);
   }
 
@@ -43,7 +41,7 @@ export class CartController {
 
   @UseGuards(JwtAuthGuard)
   @UseInterceptors(ClassSerializerInterceptor)
-  @Delete("delete")
+  @Post("delete")
   public async deleteCartItem(@Body() cartDto: CartDto): Promise<any> {
     return await this.cartService.deleteCartItem(cartDto);
   }

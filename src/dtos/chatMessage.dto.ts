@@ -50,7 +50,7 @@ export class GetChatMessageDto {
   @ApiPropertyOptional()
   @IsOptional()
   @IsString()
-  userId?: string;
+  userId: string;
 
   @ApiPropertyOptional()
   @IsOptional()

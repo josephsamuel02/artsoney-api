@@ -8,12 +8,23 @@ model Cart {
 }
 
 type CartArtworks {
-  userId        String?
-  storeId       String?
-  product_id    String?
-  product_image String[]
-  product_title String?
-  price         Int?
-  quantity      Int?
-  createdAt     DateTime @default(now())
+  userId       String?
+  storeId      String?
+  artwork_id   String?
+  images       String[]
+  artwork_name String?
+  price        Int?
+  quantity     Int?
+
+  description  String?
+  artwork_type String?
+
+  thumbnail   String?
+  tags        String[]
+  tools       String[]
+  embed_code  String[]
+  audio_video String[]
+  animated_3d String[]
+
+  createdAt DateTime @default(now())
 }

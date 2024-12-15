@@ -1,4 +1,10 @@
-import { IsString, IsNotEmpty, IsOptional, IsNumber } from "class-validator";
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsNumber,
+  IsObject,
+} from "class-validator";
 import { ApiProperty, ApiPropertyOptional } from "@nestjs/swagger";
 
 export class CartDto {
@@ -15,9 +21,11 @@ export class CartDto {
   @IsString()
   @ApiPropertyOptional()
   @IsOptional()
-  product_id?: string;
+  artwork_id?: string;
 
-  @IsString()
+  @ApiPropertyOptional()
+  @IsObject()
+  @IsOptional()
   product?: CartArtworks;
 
   @ApiPropertyOptional()
@@ -34,12 +42,22 @@ export class CartDto {
   @IsString()
   storeId?: string;
 }
+
 interface CartArtworks {
   userId?: string;
   storeId?: string;
-  product_id?: string;
-  product_image?: string[];
-  product_title?: string;
   price?: number;
   quantity?: number;
+  artwork_id?: string;
+  artwork_name?: string;
+  description?: string;
+  artwork_type?: string;
+  thumbnail?: string;
+  images: string[];
+
+  tags?: string[];
+  tools?: string[];
+  embed_code?: string[];
+  audio_video?: string[];
+  animated_3d?: string[];
 }

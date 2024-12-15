@@ -50,6 +50,6 @@ export class ChatController {
   @UseInterceptors(ClassSerializerInterceptor)
   @Get(":userId")
   async getAllMessagesForUser(@Param("userId") userId: string) {
-    return this.chatService.getAllMessagesForUser({ userId: userId });
+    return this.chatService.getAllMessagesForUser(userId);
   }
 }

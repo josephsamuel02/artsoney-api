@@ -12,6 +12,8 @@ import {
   GetChatMessageDto,
   SendChatMessageDto,
 } from "src/dtos/chatMessage.dto";
+import { UseGuards, UsePipes, ValidationPipe } from "@nestjs/common";
+import { JwtAuthGuard } from "src/validation/jwt-auth.guard";
 
 @WebSocketGateway({
   cors: {
@@ -35,24 +37,24 @@ export class ChatGateway {
 
     if (userId) {
       try {
-        const allChatMessages = await this.chatService.getAllMessagesForUser({
-          userId: userId,
-        });
-        // client.emit(`${userId}`, allChatMessages);
-        client.emit(`connected`, allChatMessages);
+        const allChatMessages =
+          await this.chatService.getAllMessagesForUser(userId);
+        this.server.emit(`${userId}`, allChatMessages);
+        // client.emit(`connected`, allChatMessages);
+        // return allChatMessages;
       } catch (error) {
         console.error("Error fetching chat history:", error);
-        client.emit(`connected`, {
-          status: "error",
-          message: "Failed to retrieve chat history",
-        });
-        // client.emit(`${userId}`, {
+        // client.emit(`connected`, {
         //   status: "error",
         //   message: "Failed to retrieve chat history",
         // });
+        client.emit(`${userId}`, {
+          status: "error",
+          message: "Failed to retrieve chat history",
+        });
       }
     } else {
-      client.emit("connected", {
+      client.emit(`${userId}`, {
         status: "error",
         message: "User  ID is required",
       });
@@ -63,8 +65,8 @@ export class ChatGateway {
     console.log(`Client disconnected: ${client.id}`);
   }
 
-  // @UsePipes(new ValidationPipe())
-  // @UseGuards(JwtAuthGuard)
+  @UsePipes(new ValidationPipe())
+  @UseGuards(JwtAuthGuard)
   @SubscribeMessage("create_message")
   async createConversation(
     @MessageBody() createChatMessageDto: CreateChatMessageDto,
@@ -75,10 +77,10 @@ export class ChatGateway {
         await this.chatService.createOrUpdateConversation(createChatMessageDto);
 
       client.emit(
-        `${createChatMessageDto.sender}`,
+        `${message.data.id}`,
         "this is the start of your legendary conversation with",
       );
-      return message;
+      // return message;
     } catch (error) {
       console.error("Error handling new chat message:", error);
       client.emit("error", "Failed to send message");
@@ -87,17 +89,13 @@ export class ChatGateway {
 
   @SubscribeMessage("get_all_user_messages")
   async getAllMessagesForUser(@ConnectedSocket() client: Socket) {
-    console.log(`Client connected: ${client.id}`);
-
     // Extract sender and receiver from query parameters
     const userId = client.handshake.query.userId as string;
-    console.log(userId);
     if (userId) {
       try {
-        const allChatMessages = await this.chatService.getAllMessagesForUser({
-          userId: userId,
-        });
-        client.emit(`${userId}`, allChatMessages);
+        const allChatMessages =
+          await this.chatService.getAllMessagesForUser(userId);
+        client.emit("get_all_user_messages", allChatMessages);
       } catch (error) {
         console.error("Error fetching chat history:", error);
         client.emit(`${userId}`, {
@@ -137,10 +135,11 @@ export class ChatGateway {
     try {
       const message = await this.chatService.sendMessage(sendChatMessageDto);
 
-      client.broadcast.emit(`${sendChatMessageDto.id}`, message);
-      client.emit(`${sendChatMessageDto.id}`, message);
-      // client.emit("newMessage", message);
-      return message;
+      // client.broadcast.emit(`${sendChatMessageDto.id}`, message);
+      // client.emit(`${sendChatMessageDto.id}`, message);
+      this.server.emit(`${sendChatMessageDto.id}`, message);
+
+      // return message;
     } catch (error) {
       console.error("Error handling new chat message:", error);
       client.emit("error", "Failed to send message");

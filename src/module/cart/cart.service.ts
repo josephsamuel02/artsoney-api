@@ -16,7 +16,7 @@ export class CartService {
   public async getCartItems(cartDto: CartDto): Promise<any> {
     try {
       // Check if user already exists
-      const cartExist = await this.prisma.cart.findUnique({
+      const cartExist = await this.prisma.cart.findFirst({
         where: {
           userId: cartDto.userId,
         },
@@ -50,27 +50,53 @@ export class CartService {
   public async addToCart(cartDto: CartDto): Promise<any> {
     try {
       // Check if user already exists
-      const cartExist = await this.prisma.cart.findFirst({
+      const cart = await this.prisma.cart.findUnique({
         where: {
           userId: cartDto.userId,
         },
       });
 
-      if (!cartExist) {
-        throw new NotFoundException({
-          message: "Unable find user's cart",
+      if (!cart) {
+        const newCart = await this.prisma.cart.create({
+          data: {
+            userId: cartDto.userId,
+            storeId: cartDto.userId,
+            products: [],
+            total_price: 0,
+          },
         });
-      }
 
+        const updated = await this.prisma.cart.update({
+          where: {
+            userId: cartDto.userId,
+          },
+          data: {
+            products: {
+              push: cartDto.product,
+            },
+            total_price:
+              newCart.total_price +
+              cartDto.product.price * cartDto.product.quantity, // Optionally update the total price
+          },
+        });
+
+        return {
+          status: 200,
+          message: "Product added to cart successfully",
+          data: updated,
+        };
+      }
       // Check if the product already exists in the cart
-      const productExists = cartExist.products.some(
-        (product) => product.product_id === cartDto.product_id,
+      const productExists = cart.products.some(
+        (product: any) => product.artwork_id === cartDto.artwork_id,
       );
 
       if (productExists) {
-        throw new BadRequestException({
+        return {
+          status: 200,
           message: "Product already exists in the cart",
-        });
+          data: productExists,
+        };
       }
 
       // Add the new product to the cart
@@ -83,15 +109,14 @@ export class CartService {
             push: cartDto.product,
           },
           total_price:
-            cartExist.total_price +
-            cartDto.product.price * cartDto.product.quantity, // Optionally update the total price
+            cart.total_price + cartDto.product.price * cartDto.product.quantity, // Optionally update the total price
         },
       });
 
       return {
         status: 200,
         message: "Product added to cart successfully",
-        updatedCart,
+        data: updatedCart,
       };
     } catch (error) {
       throw new BadRequestException({
@@ -114,19 +139,20 @@ export class CartService {
           message: "Unable find user's cart",
         });
       }
+      // let quantity = cartDto.product.quantity
+
       let newTotalPrice: number;
       const updatedProductArray = [];
       // Update the specific product
       const updateProduct = cartExist.products.map((product) => {
-        // Check if the product  exists in the cart
+        // Check if the product exists in the cart
 
-        if (product.product_id !== cartDto.product.product_id) {
+        if (product.artwork_id !== cartDto.product.artwork_id) {
           updatedProductArray.push(product);
         }
 
-        if (product.product_id === cartDto.product.product_id) {
+        if (product.artwork_id === cartDto.product.artwork_id) {
           // calculate the new price
-
           const productTotalPrice = product.price * product.quantity;
           const totalPrice = cartExist.total_price - productTotalPrice;
           newTotalPrice = totalPrice + product.price * cartDto.product.quantity;
@@ -164,7 +190,7 @@ export class CartService {
       return {
         status: 200,
         message: "Cart product updated successfully",
-        data: { ...updatedCart },
+        data: updatedCart,
       };
     } catch (error) {
       throw new BadRequestException({
@@ -188,7 +214,7 @@ export class CartService {
 
       // Find the product to delete
       const productToDelete = cartExist.products.find(
-        (product) => product.product_id === cartDto.product_id,
+        (product) => product.artwork_id === cartDto.product.artwork_id,
       );
 
       if (!productToDelete) {
@@ -204,7 +230,7 @@ export class CartService {
 
       // Filter out the product to delete from the products array
       const updatedProducts = cartExist.products.filter(
-        (product) => product.product_id !== cartDto.product_id,
+        (product) => product.artwork_id !== cartDto.product.artwork_id,
       );
 
       // Update the cart with the new products array and total price

@@ -24,21 +24,19 @@ model User {
   time_zone String?
   language  String?
 
-  profession String[]
-  following  following[]
-  followers  followers[]
-  likes      Int?        @default(0)
-  interests  String[]
-  hubby      String[]
-  Post       Post[]
-  moodboard  moodboard?
-
-  isActive     Boolean? @default(false)
-  suspended    Boolean? @default(false)
+  profession   String[]
+  following    following[]
+  followers    followers[]
+  likes        Int?        @default(0)
+  interests    String[]
+  hubby        String[]
+  Post         Post[]
+  moodboard    moodboard?
+  isActive     Boolean?    @default(false)
+  suspended    Boolean?    @default(false)
   authStrategy String?
 
-  Store Store?
-
+  Store    Store?
   artworks artwork[] // Relation to Artwork
 
   createdAt DateTime @default(now())

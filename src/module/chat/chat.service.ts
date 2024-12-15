@@ -36,7 +36,7 @@ export class ChatService {
         data: {
           sender: sender,
           receiver: receiver,
-          content: contentArray, // Initialize the content field as an array
+          content: contentArray,
         },
       });
 
@@ -81,7 +81,22 @@ export class ChatService {
         },
       });
 
-      if (existingConversation) {
+      if (!existingConversation) {
+        // If no conversation exists, create a new one
+        const newConversation = await this.prisma.chat.create({
+          data: {
+            sender,
+            receiver,
+            content: [contentToPush], // Initialize content as an array with the new message
+          },
+        });
+
+        return {
+          status: 200,
+          message: "Conversation created",
+          data: newConversation,
+        };
+      } else {
         // If a conversation exists, update it with the new content
         const updatedConversation = await this.prisma.chat.update({
           where: { id: existingConversation.id },
@@ -97,21 +112,6 @@ export class ChatService {
           message: "Conversation updated",
           data: updatedConversation,
         };
-      } else {
-        // If no conversation exists, create a new one
-        const newConversation = await this.prisma.chat.create({
-          data: {
-            sender,
-            receiver,
-            content: [contentToPush], // Initialize content as an array with the new message
-          },
-        });
-
-        return {
-          status: 200,
-          message: "Conversation created",
-          data: newConversation,
-        };
       }
     } catch (error) {
       throw new BadRequestException({
@@ -120,7 +120,7 @@ export class ChatService {
     }
   }
 
-  async getAllMessagesForUser(getChatMessageDto: GetChatMessageDto) {
+  async getAllMessagesForUser(userId: string) {
     try {
       const page = 1;
       const limit = 50;
@@ -134,10 +134,7 @@ export class ChatService {
       // Fetch chat messages with user details for sender and receiver
       const chatMessages = await this.prisma.chat.findMany({
         where: {
-          OR: [
-            { sender: getChatMessageDto.userId },
-            { receiver: getChatMessageDto.userId },
-          ],
+          OR: [{ sender: userId }, { receiver: userId }],
         },
         include: {
           senderUser: {
@@ -164,37 +161,50 @@ export class ChatService {
         take: limit,
       });
 
-      if (!chatMessages || chatMessages.length === 0) {
-        return {
-          status: 200,
-          message: "no messages found",
-          data: [],
-        };
-      }
+      // const chatMessages = await this.prisma.chat.findMany({
+      //   where: {
+      //     sender: userId,
+      //   },
+      // });
 
-      // Filter out the current user's details from the sender/receiver
-      const filteredMessages = chatMessages.map((chat) => {
-        const otherUser =
-          chat.sender === getChatMessageDto.userId
-            ? chat.receiverUser
-            : chat.senderUser;
-        return {
-          ...chat,
-          otherUser, // Include details of the other participant
-        };
-      });
+      // if (!chatMessages || chatMessages.length === 0) {
+      //   return {
+      //     status: 200,
+      //     message: "no messages found",
+      //     data: [],
+      //   };
+      // }
 
       return {
         status: 200,
         message: "success",
-        data: filteredMessages,
+        data: chatMessages,
       };
+
+      // Filter out the current user's details from the sender/receiver
+      // const filteredMessages = chatMessages.map((chat) => {
+      //   const otherUser =
+      //     chat.sender === getChatMessageDto.userId
+      //       ? chat.receiverUser
+      //       : chat.senderUser;
+      //   return {
+      //     ...chat,
+      //     otherUser, // Include details of the other participant
+      //   };
+      // });
+
+      // return {
+      //   status: 200,
+      //   message: "success",
+      //   data: filteredMessages,
+      // };
     } catch (error) {
       throw new BadRequestException({
         error: error.message,
       });
     }
   }
+
   async getMessages(getChatMessageDto: GetChatMessageDto) {
     try {
       const chatMessage = await this.prisma.chat.findUnique({
@@ -202,7 +212,25 @@ export class ChatService {
           id: getChatMessageDto.id,
         },
         select: {
-          content: true,
+          content: true, // Select the content of the chat
+          senderUser: {
+            // Include sender user details
+            select: {
+              userId: true,
+              user_name: true,
+              profile_img: true,
+              profession: true, // Assuming "occupation" is stored in "profession" (adjust if needed)
+            },
+          },
+          receiverUser: {
+            // Include receiver user details
+            select: {
+              userId: true,
+              user_name: true,
+              profile_img: true,
+              profession: true, // Adjust if necessary
+            },
+          },
         },
       });
 
@@ -213,7 +241,7 @@ export class ChatService {
       return {
         status: 200,
         message: "success",
-        data: chatMessage.content, // Return the content directly
+        data: chatMessage, // Return the chat data with user details
       };
     } catch (error) {
       throw new BadRequestException({
@@ -221,6 +249,7 @@ export class ChatService {
       });
     }
   }
+
   async sendMessage(sendChatMessageDto: SendChatMessageDto) {
     try {
       const { id, user_id, text, url, image } = sendChatMessageDto;
@@ -246,6 +275,25 @@ export class ChatService {
             push: contentToPush,
           },
         },
+        select: {
+          content: true,
+          senderUser: {
+            select: {
+              userId: true,
+              user_name: true,
+              profile_img: true,
+              profession: true,
+            },
+          },
+          receiverUser: {
+            select: {
+              userId: true,
+              user_name: true,
+              profile_img: true,
+              profession: true,
+            },
+          },
+        },
       });
 
       if (!data) {
@@ -254,10 +302,37 @@ export class ChatService {
         );
       }
 
+      const chatMessage = await this.prisma.chat.findUnique({
+        where: {
+          id: id,
+        },
+        select: {
+          content: true, // Select the content of the chat
+          senderUser: {
+            // Include sender user details
+            select: {
+              userId: true,
+              user_name: true,
+              profile_img: true,
+              profession: true, // Assuming "occupation" is stored in "profession" (adjust if needed)
+            },
+          },
+          receiverUser: {
+            // Include receiver user details
+            select: {
+              userId: true,
+              user_name: true,
+              profile_img: true,
+              profession: true, // Adjust if necessary
+            },
+          },
+        },
+      });
+
       return {
         status: 200,
         message: "Message sent successfully",
-        data,
+        data: chatMessage,
       };
     } catch (error) {
       throw new BadRequestException({

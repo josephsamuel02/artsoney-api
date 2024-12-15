@@ -1,20 +1,18 @@
 model artwork {
-  id         String  @id @default(auto()) @map("_id") @db.ObjectId
-  artwork_id String  @unique
-  userId     String
-  storeId    String?
-
-  artwork_name      String
-  tags              String[]
-  tools             String[]
-  description       String?
-  art_field         String[]
-  visibility        String?     @default("everyone")
-  disable_comments  Boolean?    @default(false)
-  copyright_license String[]
-  co_owners         co_owners[]
-  designed_for      String[]
-
+  id                                 String                              @id @default(auto()) @map("_id") @db.ObjectId
+  artwork_id                         String                              @unique
+  userId                             String
+  storeId                            String?
+  artwork_name                       String
+  tags                               String[]
+  tools                              String[]
+  description                        String?
+  art_field                          String[]
+  visibility                         String?                             @default("everyone")
+  disable_comments                   Boolean?                            @default(false)
+  copyright_license                  String[]
+  co_owners                          co_owners[]
+  designed_for                       String[]
   artwork_type                       Artwork_type
   appreciation                       String[]
   dimensions                         Dimensions?
@@ -25,25 +23,20 @@ model artwork {
   animated_3d                        String[]
   certificate_of_authentication_type Certificate_of_authentication_type?
   certificate_of_authentication      String[]
+  available_quantity                 Int?
+  currency                           currency?
+  auction                            Boolean?                            @default(false)
+  price                              Int?
+  likes                              Likes[]
+  likesCount                         Int                                 @default(0)
+  views                              Int?
+  comments                           comments[]
+  for_sale                           Boolean?
+  draft                              Boolean                             @default(false)
+  production_files                   String[]
 
-  available_quantity Int?
-  currency           currency?
-  auction            Boolean?  @default(false)
-  price              Int?
-
-  likes      Likes[]
-  likesCount Int        @default(0)
-  views      Int?
-  comments   comments[]
-
-  for_sale Boolean?
-  draft    Boolean  @default(false)
-
-  production_files String[]
-
-  Store Store @relation(fields: [id], references: [id])
-  user  User  @relation(fields: [userId], references: [userId]) // Define relation here
-
+  Store     Store     @relation(fields: [id], references: [id])
+  user      User      @relation(fields: [userId], references: [userId]) // Define relation here
   createdAt DateTime? @default(now())
   updatedAt DateTime? @updatedAt
 }
